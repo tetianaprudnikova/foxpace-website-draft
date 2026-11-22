@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Foxpace</title>
+<link rel="icon" type="image/png" href="art/app-icon-192.png">
+<style>
+/* Holding page. No external fonts, cookies or scripts from other sites. */
+:root {
+  --canvas: #FFF9F2; --ink: #2E241F; --ink-2: #6F5E54; --line: #D8C8BA; --accent: #C35427;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --canvas: #1C1612; --ink: #F5EBE1; --ink-2: #CDBBAD; --line: #4A3C33; --accent: #F0A06A; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--canvas); color: var(--ink);
+  font: 400 1.0625rem/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex; flex-direction: column; min-height: 100%;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+.lang { align-self: flex-end; display: flex; gap: 4px; }
+.lang button {
+  font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--ink-2); background: none;
+  border: 1px solid transparent; border-radius: 8px; padding: 6px 10px; min-height: 44px; min-width: 44px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { color: var(--ink); border-color: var(--line); }
+main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding-bottom: 8vh; }
+main img { width: 132px; height: auto; margin-bottom: 12px; }
+h1 { font-size: clamp(2rem, 7vw, 2.75rem); font-weight: 650; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+p { margin: 0; color: var(--ink-2); font-size: 1.15rem; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<div class="lang" role="group" aria-label="Language">
+  <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
+  <button type="button" data-lang="de" lang="de" aria-pressed="false">DE</button>
+</div>
+<main>
+  <img src="art/fox-default.svg" alt="" width="132" height="154">
+  <h1>Foxpace</h1>
+  <p id="soon">Coming soon.</p>
+</main>
+<script>
+// Same language key as the full site. Stored only in this browser, never sent anywhere.
+(function () {
+  var text = { en: "Coming soon.", de: "Bald verfügbar." };
+  function set(lang) {
+    document.documentElement.lang = lang;
+    document.getElementById("soon").textContent = text[lang];
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+  }
+  var saved = null;
+  try { saved = localStorage.getItem("foxpace-lang"); } catch (e) {}
+  set(saved === "de" || saved === "en" ? saved : (/^de/i.test(navigator.language || "") ? "de" : "en"));
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      set(b.dataset.lang);
+      try { localStorage.setItem("foxpace-lang", b.dataset.lang); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>
