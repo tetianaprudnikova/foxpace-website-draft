@@ -373,14 +373,18 @@ section.band.alt { background: var(--subtle); }
 .types > div { border-top: 3px solid var(--line-strong); padding-top: 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
 .types .ex { font-size: 0.9rem; color: var(--ink-3); }
 .types p { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; }
-/* Home screen widget section. The widgets follow Figma "Widgets" (939:5169): app colours, so they look
-   the same in light and dark mode, like the phone demo. The grey panel stands in for a home screen. */
-.widget-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 40px 56px; align-items: center; }
-.widget-copy { display: grid; gap: 14px; min-width: 0; }
-.widget-points { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 10px; }
-.widget-points li { position: relative; padding-left: 22px; color: var(--ink-2); }
-.widget-points li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; background: var(--fox); }
-.home-screen { background: #E2E6EC; border-radius: 28px; padding: 28px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; justify-content: center; min-width: 0; }
+/* Home screen widget section. The widgets follow Figma "Widgets" (939:5169) in app colours, shown on a
+   phone home screen (same phone frame as the demo). Fixed app colours, so it looks the same in light and dark mode. */
+.widget-section { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px 72px; align-items: center; }
+.widget-copy { display: grid; gap: 16px; min-width: 0; max-width: 520px; }
+.widget-feats { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 18px; }
+.widget-feats li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
+.widget-feats .wf-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--subtle); color: var(--fox); display: grid; place-items: center; }
+.widget-feats b { display: block; color: var(--ink); font-weight: 600; }
+.widget-feats span { color: var(--ink-2); }
+.widget-note { font-size: 0.9rem; color: var(--ink-3); margin: 4px 0 0; }
+.home-phone { justify-self: center; position: relative; }
+.home-phone .screen { background: linear-gradient(165deg, #F6D9C2 0%, #EFC4A6 38%, #D99A78 100%); }
 .wg { background: var(--app-surface); border: 1px solid var(--app-line); border-radius: 24px; color: var(--app-ink); display: flex; flex-direction: column; text-align: left; min-width: 0; }
 .wg-label { font: 500 12px/16px var(--font-body); color: var(--app-ink-2); text-transform: uppercase; }
 .wg-title { font-family: var(--font-display); font-weight: 400; color: var(--app-ink); }
@@ -398,7 +402,33 @@ section.band.alt { background: var(--subtle); }
 .wg-wide .wg-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: auto; }
 .wg-wide .wg-time { font: 600 18px/24px var(--font-body); color: var(--app-ink-2); }
 .wg-wide .wg-hint { font: 400 16px/20px var(--font-body); color: var(--app-action); }
-@media (max-width: 860px) { .widget-section { grid-template-columns: minmax(0, 1fr); } }
+.hs { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 0 14px; color: #2E241F; font-family: var(--font-body); }
+.hs .sb { padding: 0 6px; color: #2E241F; }
+.hs-clock { margin: 18px 4px 0; font: 400 52px/1 var(--font-display); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.hs-date { margin: 6px 4px 0; font-size: 14px; line-height: 18px; color: #5A463B; }
+.hs .wg { box-shadow: 0 8px 20px -12px rgba(46,36,31,0.45); }
+.hs .wg-wide { width: auto; height: auto; margin-top: 22px; padding: 14px 14px 12px; border-radius: 22px; }
+.hs .wg-wide .wg-label, .hs .wg-wide .wg-badge { font-size: 10px; line-height: 14px; }
+.hs .wg-wide .wg-badge { padding: 3px 6px; border-radius: 6px; }
+.hs .wg-wide .wg-title { font-size: 18px; line-height: 22px; margin-top: 12px; }
+.hs .wg-wide .wg-foot { margin-top: 14px; flex-wrap: wrap; row-gap: 2px; }
+.hs .wg-wide .wg-time { font-size: 14px; line-height: 18px; }
+.hs .wg-wide .wg-hint { font-size: 13px; line-height: 18px; }
+.hs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.hs .wg-compact { width: auto; height: 121px; padding: 12px; border-radius: 22px; }
+.hs .wg-compact .wg-eyebrow { gap: 6px; }
+.hs .wg-compact .wg-eyebrow::before { width: 6px; height: 6px; }
+.hs .wg-compact .wg-label { font-size: 9px; line-height: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hs .wg-compact .wg-title { font-size: 13px; line-height: 17px; margin-top: 8px; overflow-wrap: anywhere; }
+.hs .wg-compact .wg-time { font-size: 18px; line-height: 18px; }
+.hs .wg-compact .wg-date { font-size: 10px; line-height: 12px; margin-top: 4px; }
+.hs-apps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 0; justify-items: center; align-content: center; }
+.hs-app { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,253,248,0.55); }
+.hs-icons { display: grid; grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 14px 0; margin-top: 18px; }
+.hs-dock { margin-top: auto; margin-bottom: 18px; display: flex; justify-content: space-around; padding: 10px 8px; border-radius: 26px; background: rgba(255,253,248,0.35); }
+.hs-dock img, .hs-dock .hs-app { width: 46px; height: 46px; border-radius: 14px; display: block; }
+.hs-dock .hs-app { background: rgba(255,253,248,0.6); }
+@media (max-width: 860px) { .widget-section { grid-template-columns: minmax(0, 1fr); } .widget-copy { max-width: none; } }
 @media (max-width: 520px) { .home-screen { padding: 16px; gap: 14px; } .wg-wide { height: auto; min-height: 168px; } .wg-wide .wg-title { font-size: 21px; line-height: 24px; } }
 
 /* Principles */
@@ -764,25 +794,37 @@ footer a { color: var(--ink-2); }
       <div class="widget-copy">
         <p class="eyebrow" data-de="Widget">Widget</p>
         <h2 data-de="Die nächste Mission auf dem Startbildschirm">The next mission, on the home screen</h2>
-        <p class="lede prose" data-de="Mit dem Foxpace-Widget sieht man, was als Nächstes kommt, ohne die App zu öffnen.">With the Foxpace widget, you can see what’s next without opening the app.</p>
-        <ul class="widget-points prose">
-          <li data-de="Es zeigt die nächste Mission und ihre Uhrzeit.">It shows the next mission and its time.</li>
-          <li data-de="Ein Tipp öffnet die Details der Mission. Ein Timer startet nie von selbst.">A tap opens the mission’s details. It never starts a timer by itself.</li>
-          <li data-de="Es gibt zwei Größen: klein und breit.">It comes in two sizes: small and wide.</li>
-          <li data-de="Missionstitel sind für alle sichtbar, die den Startbildschirm sehen.">Mission titles are visible to anyone who can see the home screen.</li>
+        <p class="lede prose" data-de="Jedes Mal, wenn Ihr Kind das Handy in die Hand nimmt, sieht es, was als Nächstes kommt. Ohne die App zu öffnen.">Every time your child picks up the phone, they see what’s next. Without opening the app.</p>
+        <ul class="widget-feats">
+          <li><span class="wf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="3"/><path d="M9 7.5h6M9 11h4"/></svg></span><div><b data-de="Auf einen Blick">At a glance</b><span data-de="Die nächste Mission und ihre Uhrzeit.">The next mission and its time.</span></div></li>
+          <li><span class="wf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10"/><path d="M12 9.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.5a5 5 0 0 1-4-2L5 15.5a1.5 1.5 0 0 1 2.3-1.9L9 15"/></svg></span><div><b data-de="Ein Tipp öffnet die Mission">One tap opens the mission</b><span data-de="Der Timer startet erst, wenn Ihr Kind ihn startet.">The timer starts only when your child starts it.</span></div></li>
+          <li><span class="wf-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg></span><div><b data-de="Klein oder breit">Small or wide</b><span data-de="Zwei Größen, passend für jeden Startbildschirm.">Two sizes to fit any home screen.</span></div></li>
         </ul>
+        <p class="widget-note prose" data-de="Missionstitel sind für alle sichtbar, die den Startbildschirm sehen.">Mission titles are visible to anyone who can see the home screen.</p>
       </div>
-      <div class="home-screen" role="img" aria-label="Example: the small and the wide Foxpace widget, both showing the next mission, Homework: Math, German, English, today at 15:30" data-de-aria-label="Beispiel: das kleine und das breite Foxpace-Widget, beide mit der nächsten Mission, Hausaufgaben: Mathe, Deutsch, Englisch, heute um 15:30">
-        <div class="wg wg-compact" aria-hidden="true">
-          <div class="wg-eyebrow"><span class="wg-label" data-de="Nächste Mission">Next mission</span></div>
-          <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
-          <div class="wg-time">15:30</div>
-          <div class="wg-date" data-de="Heute">Today</div>
-        </div>
-        <div class="wg wg-wide" aria-hidden="true">
-          <div class="wg-head"><span class="wg-label" data-de="Nächste Mission">Next mission</span><span class="wg-badge" data-de="Heute">Today</span></div>
-          <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
-          <div class="wg-foot"><span class="wg-time">15:30</span><span class="wg-hint" data-de="Tippen, um die Mission zu sehen&nbsp;→">Tap to view mission&nbsp;→</span></div>
+      <div class="phone home-phone" role="img" aria-label="Example: a phone home screen with the wide and the small Foxpace widget, both showing the next mission, Homework: Math, German, English, today at 15:30" data-de-aria-label="Beispiel: ein Startbildschirm mit dem breiten und dem kleinen Foxpace-Widget, beide mit der nächsten Mission, Hausaufgaben: Mathe, Deutsch, Englisch, heute um 15:30">
+        <div class="screen">
+          <div class="hs" aria-hidden="true">
+            <div class="sb"><span>14:52</span><span class="sb-icons"><i></i><i></i></span></div>
+            <div class="hs-clock">14:52</div>
+            <div class="hs-date" data-de="Montag, 24. November">Monday, 24 November</div>
+            <div class="wg wg-wide">
+              <div class="wg-head"><span class="wg-label" data-de="Nächste Mission">Next mission</span><span class="wg-badge" data-de="Heute">Today</span></div>
+              <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
+              <div class="wg-foot"><span class="wg-time">15:30</span><span class="wg-hint" data-de="Tippen, um die Mission zu sehen&nbsp;→">Tap to view mission&nbsp;→</span></div>
+            </div>
+            <div class="hs-row">
+              <div class="wg wg-compact">
+                <div class="wg-eyebrow"><span class="wg-label" data-de="Nächste Mission">Next mission</span></div>
+                <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
+                <div class="wg-time">15:30</div>
+                <div class="wg-date" data-de="Heute">Today</div>
+              </div>
+              <div class="hs-apps"><i class="hs-app"></i><i class="hs-app"></i><i class="hs-app"></i><i class="hs-app"></i></div>
+            </div>
+            <div class="hs-icons"><i class="hs-app"></i><i class="hs-app"></i><i class="hs-app"></i><i class="hs-app"></i></div>
+            <div class="hs-dock"><i class="hs-app"></i><img src="art/app-icon-192.png" alt=""><i class="hs-app"></i><i class="hs-app"></i></div>
+          </div>
         </div>
       </div>
     </div>
