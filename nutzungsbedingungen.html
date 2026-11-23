@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" href="art/app-icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foxpace Nutzungsbedingungen</title>
+<style>
+/* Fonts are served from this website (fonts/), not from Google. App fonts, SIL Open Font License (fonts/OFL-*.txt). */
+@font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/inter-600.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-600.woff2") format("woff2"); }
+:root {
+  --canvas: #FFF9F2; --surface: #FFFDF8; --subtle: #F3EADF; --ink: #2E241F; --ink-2: #6F5E54; --ink-3: #8F7B6E;
+  --line: #D8C8BA; --link: #C35427; --tbd-bg: #FFF1D6; --tbd-ink: #7A4A00;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --canvas: #1C1612; --surface: #261E19; --subtle: #30261F; --ink: #F5EBE1; --ink-2: #CDBBAD; --ink-3: #A8968A;
+    --line: #4A3C33; --link: #F0A06A; --tbd-bg: #3A2C14; --tbd-ink: #F5CF8A; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { background: var(--canvas); color: var(--ink); font: 400 1.0625rem/1.65 var(--font-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 64px; }
+a { color: var(--link); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid #E97832; outline-offset: 3px; border-radius: 4px; }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin-bottom: 28px; }
+.back, .lang-link { font-weight: 600; font-size: 0.95rem; }
+h1, h2 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 5vw, 2.6rem); margin: 0 0 8px; }
+h3 { font-size: 1.08rem; margin: 26px 0 8px; font-weight: 600; }
+h2 { font-size: 1.35rem; margin: 40px 0 10px; }
+p, ul { margin: 0 0 14px; max-width: 65ch; }
+ul { padding-left: 1.2em; }
+li { margin-bottom: 6px; }
+.meta { color: var(--ink-3); font-size: 0.95rem; }
+.draft { background: var(--tbd-bg); color: var(--tbd-ink); border-radius: 10px; padding: 14px 16px; margin: 20px 0 28px; font-size: 0.95rem; }
+.tbd { display: inline-block; background: var(--tbd-bg); color: var(--tbd-ink); border: 1px dashed currentColor; border-radius: 6px; padding: 0 7px; font-size: 0.85rem; font-weight: 500; }
+.short { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.short h2 { margin-top: 0; }
+.short ul { margin: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+.table-wrap { overflow-x: auto; margin: 0 0 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-weight: 600; color: var(--ink-2); font-size: 0.85rem; letter-spacing: 0.02em; }
+.muted { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="./">← Zurück zu Foxpace</a>
+    <a class="lang-link" href="terms.html" lang="en" hreflang="en">English</a>
+  </div>
+
+  <h1>Nutzungsbedingungen</h1>
+  <p class="meta">Stand: 23. November 2026</p>
+
+  <section class="short">
+    <h2>Kurz gesagt</h2>
+    <ul>
+      <li>Foxpace ist eine kostenlose App, die hilft, bei einer Aufgabe zu bleiben. Sie ist kostenlos und bleibt es.</li>
+      <li>Du brauchst kein Konto. Alles, was du eingibst, bleibt auf deinem Gerät.</li>
+      <li>Foxpace ist ein Werkzeug für Fokus und Routinen. Es ist keine medizinische Beratung, keine Therapie und keine Diagnose.</li>
+      <li>Eltern oder Erziehungsberechtigte sollten diese Nutzungsbedingungen und die Datenschutzerklärung gemeinsam mit dem Kind lesen.</li>
+    </ul>
+  </section>
+
+  <h2>Wer wir sind</h2>
+  <p>Foxpace wird von Tetiana Prudnikova entwickelt, c/o GAM, Pappelallee 64, 10437 Berlin, Deutschland. E-Mail: <a href="mailto:hello@foxpace.de">hello@foxpace.de</a>.</p>
+
+  <h2>Foxpace nutzen</h2>
+  <ul>
+    <li>Foxpace ist für Kinder gemacht und für die Eltern und Erziehungsberechtigten, die sie begleiten. Kinder sollten die App gemeinsam mit einem Erwachsenen nutzen, der diese Bedingungen und die Datenschutzerklärung gelesen hat.</li>
+    <li>Du darfst Foxpace auf deinen eigenen Geräten privat und nicht kommerziell nutzen. Die App ist kostenlos. Es gibt keine In-App-Käufe, keine Abos und keine Werbung.</li>
+    <li>Du entscheidest, was du eingibst. Gib nichts ein, was jemand, der das Telefon in die Hand nimmt, nicht sehen soll: Widgets und Benachrichtigungen können Missionstitel auf dem Sperr- oder Startbildschirm zeigen.</li>
+    <li>Bitte kopiere, verkaufe oder verändere die App nicht und versuche nicht, ihre Funktionsweise zu umgehen.</li>
+  </ul>
+
+  <h2>Was Foxpace nicht ist</h2>
+  <ul>
+    <li>Foxpace ist kein Medizinprodukt und keine Behandlung. Die App diagnostiziert oder behandelt keine Erkrankung und verspricht keine bestimmten Ergebnisse.</li>
+    <li>Erinnerungen hängen vom Gerät ab: von seinen Einstellungen, vom Energiesparmodus, von „Bitte nicht stören“ und von den Regeln des Systems für Benachrichtigungen. Foxpace kann nicht garantieren, dass eine Erinnerung oder ein Fokus-Check pünktlich erscheint. Bitte verlass dich nicht für Sicherheitsrelevantes darauf, zum Beispiel für die Einnahme von Medikamenten.</li>
+    <li>Eltern und Erziehungsberechtigte bleiben für die Handynutzung, die Bildschirmzeit und die Sicherheit des Kindes verantwortlich.</li>
+  </ul>
+
+  <h2>Deine Daten</h2>
+  <p>Alles, was Foxpace speichert, bleibt auf deinem Gerät. Die <a href="datenschutz.html">Datenschutzerklärung</a> erklärt, was gespeichert wird und wie du es löschst. Wenn du die App löschst, werden auch die Daten gelöscht.</p>
+
+  <h2>Änderungen an der App und an diesen Bedingungen</h2>
+  <p>Wir können Foxpace ändern oder einstellen und diese Bedingungen anpassen, zum Beispiel wenn die App neue Funktionen bekommt. Wenn sich die Bedingungen in einer für dich wichtigen Weise ändern, sagen es das neue Datum oben auf dieser Seite und die Hinweise zum App-Update. Wenn du mit einer Änderung nicht einverstanden bist, kannst du die App nicht mehr nutzen und sie löschen.</p>
+
+  <h2>Haftung</h2>
+  <p>Wir entwickeln Foxpace mit Sorgfalt und stellen die App kostenlos zur Verfügung. Für kleinere Fehler, etwa eine verspätete Erinnerung, haften wir nicht. Das gilt nicht, soweit das Gesetz eine Haftungsbeschränkung nicht erlaubt, zum Beispiel bei Vorsatz oder grober Fahrlässigkeit, bei Verletzung von Leben, Körper oder Gesundheit oder nach dem Produkthaftungsgesetz.</p>
+
+  <h2>Deine gesetzlichen Rechte</h2>
+  <p>Diese Bedingungen schränken keine Rechte ein, die dir als Verbraucherin oder Verbraucher gesetzlich zustehen.</p>
+
+  <h2>Recht und Kontakt</h2>
+  <p>Es gilt deutsches Recht. Die Verbraucherschutzvorschriften des Landes, in dem du lebst, bleiben davon unberührt. Bei Fragen oder Beschwerden schreib an <a href="mailto:hello@foxpace.de">hello@foxpace.de</a>.</p>
+
+  <p class="meta" style="margin-top:48px"><a href="./">Foxpace</a> · <a href="datenschutz.html">Datenschutzerklärung</a> · <a href="impressum.html">Impressum</a> · <a href="terms.html" lang="en" hreflang="en">English</a></p>
+</div>
+</body>
+</html>
