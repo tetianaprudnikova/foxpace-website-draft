@@ -14,6 +14,7 @@
 @font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/inter-400.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/inter-500.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/inter-600.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-400.woff2") format("woff2"); }
 @font-face { font-family: "Space Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-500.woff2") format("woff2"); }
 @font-face { font-family: "Space Grotesk"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-600.woff2") format("woff2"); }
 @font-face { font-family: "Lexend"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/lexend-400.woff2") format("woff2"); }
@@ -350,9 +351,33 @@ section.band.alt { background: var(--subtle); }
 .types > div { border-top: 3px solid var(--line-strong); padding-top: 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
 .types .ex { font-size: 0.9rem; color: var(--ink-3); }
 .types p { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; }
-/* Home screen widget: not a mission type, so it sits below the types on its own surface. */
-.widget-note { margin-top: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 6px; max-width: 620px; }
-.widget-note p { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; }
+/* Home screen widget section. The widgets follow Figma "Widgets" (939:5169): app colours, so they look
+   the same in light and dark mode, like the phone demo. The grey panel stands in for a home screen. */
+.widget-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 40px 56px; align-items: center; }
+.widget-copy { display: grid; gap: 14px; min-width: 0; }
+.widget-points { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 10px; }
+.widget-points li { position: relative; padding-left: 22px; color: var(--ink-2); }
+.widget-points li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 50%; background: var(--fox); }
+.home-screen { background: #E2E6EC; border-radius: 28px; padding: 28px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; justify-content: center; min-width: 0; }
+.wg { background: var(--app-surface); border: 1px solid var(--app-line); border-radius: 24px; color: var(--app-ink); display: flex; flex-direction: column; text-align: left; min-width: 0; }
+.wg-label { font: 500 12px/16px var(--font-body); color: var(--app-ink-2); text-transform: uppercase; }
+.wg-title { font-family: var(--font-display); font-weight: 400; color: var(--app-ink); }
+.wg-compact { width: 188px; height: 188px; padding: 16px; }
+.wg-compact .wg-eyebrow { display: flex; align-items: center; gap: 10px; }
+.wg-compact .wg-eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--app-action); flex: none; }
+.wg-compact .wg-label { font-weight: 600; font-size: 11px; }
+.wg-compact .wg-title { font-size: 18px; line-height: 26px; margin-top: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.wg-compact .wg-time { font: 400 24px/24px var(--font-display); margin-top: auto; }
+.wg-compact .wg-date { font: 500 12px/16px var(--font-body); color: var(--app-ink-2); margin-top: 8px; }
+.wg-wide { width: 410px; max-width: 100%; height: 188px; padding: 20px; }
+.wg-wide .wg-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.wg-wide .wg-badge { font: 500 12px/16px var(--font-body); color: var(--app-ink-2); background: var(--app-subtle); border-radius: 8px; padding: 5px 8px; text-transform: uppercase; }
+.wg-wide .wg-title { font-size: 24px; line-height: 24px; margin-top: 22px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.wg-wide .wg-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: auto; }
+.wg-wide .wg-time { font: 600 18px/24px var(--font-body); color: var(--app-ink-2); }
+.wg-wide .wg-hint { font: 400 16px/20px var(--font-body); color: var(--app-action); }
+@media (max-width: 860px) { .widget-section { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) { .home-screen { padding: 16px; gap: 14px; } .wg-wide { height: auto; min-height: 168px; } .wg-wide .wg-title { font-size: 21px; line-height: 24px; } }
 
 /* Principles */
 .principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; }
@@ -695,14 +720,39 @@ footer a { color: var(--ink-2); }
         <div><h3 data-de="Jederzeit">Anytime</h3><p data-de="Gespeichert und jederzeit bereit.">Saved, ready whenever.</p></div>
         <div><h3 data-de="Freier Fokus">Free Focus</h3><p data-de="Nur ein Timer. Kein Name nötig.">Just a timer. No name needed.</p></div>
       </div>
-      <div class="widget-note">
-        <h3 data-de="Auf dem Startbildschirm">On the home screen</h3>
-        <p data-de="Die nächste Mission bleibt im Blick, ohne die App zu öffnen.">The next mission stays in view, without opening the app.</p>
+    </div>
+  </section>
+
+  <section class="band" id="widget">
+    <div class="wrap widget-section">
+      <div class="widget-copy">
+        <p class="eyebrow" data-de="Widget">Widget</p>
+        <h2 data-de="Die nächste Mission auf dem Startbildschirm">The next mission, on the home screen</h2>
+        <p class="lede prose" data-de="Mit dem Foxpace-Widget sieht man, was als Nächstes kommt, ohne die App zu öffnen.">With the Foxpace widget, you can see what’s next without opening the app.</p>
+        <ul class="widget-points prose">
+          <li data-de="Es zeigt die nächste Mission und ihre Uhrzeit.">It shows the next mission and its time.</li>
+          <li data-de="Ein Tipp öffnet die Details der Mission. Ein Timer startet nie von selbst.">A tap opens the mission’s details. It never starts a timer by itself.</li>
+          <li data-de="Es gibt zwei Größen: klein und breit.">It comes in two sizes: small and wide.</li>
+          <li data-de="Missionstitel sind für alle sichtbar, die den Startbildschirm sehen.">Mission titles are visible to anyone who can see the home screen.</li>
+        </ul>
+      </div>
+      <div class="home-screen" role="img" aria-label="Example: the small and the wide Foxpace widget, both showing the next mission, Homework: Math, German, English, today at 15:30" data-de-aria-label="Beispiel: das kleine und das breite Foxpace-Widget, beide mit der nächsten Mission, Hausaufgaben: Mathe, Deutsch, Englisch, heute um 15:30">
+        <div class="wg wg-compact" aria-hidden="true">
+          <div class="wg-eyebrow"><span class="wg-label" data-de="Nächste Mission">Next mission</span></div>
+          <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
+          <div class="wg-time">15:30</div>
+          <div class="wg-date" data-de="Heute">Today</div>
+        </div>
+        <div class="wg wg-wide" aria-hidden="true">
+          <div class="wg-head"><span class="wg-label" data-de="Nächste Mission">Next mission</span><span class="wg-badge" data-de="Heute">Today</span></div>
+          <div class="wg-title" data-de="Hausaufgaben: Mathe, Deutsch, Englisch">Homework: Math, German, English</div>
+          <div class="wg-foot"><span class="wg-time">15:30</span><span class="wg-hint" data-de="Tippen, um die Mission zu sehen&nbsp;→">Tap to view mission&nbsp;→</span></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="faq">
+  <section class="band alt" id="faq">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow" data-de="Fragen">Questions</p>
@@ -747,7 +797,7 @@ footer a { color: var(--ink-2); }
 
   <!-- Try it on Android + contact, in one place. Before Google Play is ready, families sign up with this form.
        When Play is ready, add the two-step join (testers group link + Google Play testing link) above the form. -->
-  <section class="band alt join" id="contact">
+  <section class="band join" id="contact">
     <div class="wrap">
       <div class="art-disc"><img src="art/fox-looking-up.svg" alt="The Foxpace fox looking up" data-de-alt="Der Foxpace-Fuchs schaut nach oben"></div>
       <div class="join-body">
