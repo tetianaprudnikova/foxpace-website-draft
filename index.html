@@ -152,6 +152,12 @@ a { color: var(--link); text-underline-offset: 3px; }
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 .hero-copy { display: grid; gap: 24px; min-width: 0; }
+.hero-art { min-width: 0; display: grid; place-items: center; }
+.hero-art img { width: 100%; max-width: 560px; height: auto; }
+/* The interactive phone demo, in its own section under the hero. */
+.demo-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.demo-section .section-head { padding-top: 48px; }
+.demo-section .section-head { margin: 0; }
 .hero-note { font-size: 0.95rem; color: var(--ink-3); }
 /* Privacy promises under the hero button: short, literal, checked against the app (no network use, no analytics SDK, Android backup off). */
 .promises { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 10px; }
@@ -436,6 +442,9 @@ footer a { color: var(--ink-2); }
 
 @media (max-width: 920px) {
   .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 40px 56px; }
+  .hero-art img { max-width: 420px; }
+  .demo-section { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .demo-section .section-head { padding-top: 0; }
   .types { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
   .comfort { grid-template-columns: minmax(0, 1fr); }
   .privacy { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -496,6 +505,19 @@ footer a { color: var(--ink-2); }
         <p class="hero-note" data-de="Android voraussichtlich ab Dezember 2026, iPhone ab Anfang 2027.">Android planned for December 2026, iPhone for early 2027.</p>
       </div>
 
+      <div class="hero-art">
+        <img src="art/foxy-and-kid.webp" width="1124" height="1027" alt="The Foxpace fox curled around a child who is reading a book" data-de-alt="Der Foxpace-Fuchs liegt um ein Kind herum, das ein Buch liest">
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="try">
+    <div class="wrap demo-section">
+      <div class="section-head">
+        <p class="eyebrow" data-de="Ausprobieren">Try it</p>
+        <h2 data-de="So sieht ein Fokus-Check aus">What a focus check looks like</h2>
+        <p class="lede prose" data-de="Tippen Sie auf den Knopf unter dem Telefon. Foxpace fragt, ob das Kind noch bei der Mission ist, und bietet Hilfe an, wenn es nicht weiterkommt.">Tap the button under the phone. Foxpace asks if the child is still on the mission and offers help if they’re stuck.</p>
+      </div>
       <div class="demo" aria-label="Try a focus check" data-de-aria-label="Fokus-Check ausprobieren">
         <div class="phone">
           <div class="screen">
