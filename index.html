@@ -157,7 +157,7 @@ a { color: var(--link); text-underline-offset: 3px; }
 /* The interactive phone demo, in its own section under the hero. */
 .demo-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 .demo-section .section-head { padding-top: 48px; }
-.demo-section .section-head { margin: 0; }
+.demo-section .section-head { margin: 0; gap: 18px; }
 .hero-note { font-size: 0.95rem; color: var(--ink-3); }
 /* Privacy promises under the hero button: short, literal, checked against the app (no network use, no analytics SDK, Android backup off). */
 .promises { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 10px; }
@@ -354,6 +354,17 @@ section.band.alt { background: var(--subtle); }
 .escalate > div + div { border-left: 1px solid var(--line); }
 .escalate .when { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .escalate h3 { font-size: 1.1rem; }
+.escalate.stack { grid-template-columns: minmax(0, 1fr); }
+.escalate.stack > div + div { border-left: 0; border-top: 1px solid var(--line); }
+.pulse-why { display: grid; gap: 8px; margin-top: 8px; }
+.pulse-why h3 { font-size: var(--step-1); }
+.pulse-why p { color: var(--ink-2); }
+/* Light pulse: the screen dims and brightens on a slow 6-second cycle while the focus check is open
+   (as in the app: down to about 55% and back). Off with reduced motion, as in the app. */
+.pulse { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: #000; opacity: 0; border-radius: inherit; }
+.pulse.on { animation: lightpulse 6s ease-in-out infinite; }
+@keyframes lightpulse { 0%, 100% { opacity: 0; } 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .pulse.on { animation: none; } }
 .escalate p { font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
 
 /* Missions types */
@@ -474,9 +485,9 @@ footer a { color: var(--ink-2); }
     </a>
     <div class="head-r">
       <nav class="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+        <a href="#try" data-de="Fokus-Check">Focus check</a>
         <a href="#made-for" data-de="Für wen">Who it's for</a>
         <a href="#privacy" data-de="Datenschutz">Privacy</a>
-        <a href="#reminders" data-de="Erinnerungen">Reminders</a>
         <a href="#faq" data-de="Fragen">Questions</a>
       </nav>
       <div class="lang" role="group" aria-label="Language" data-de-aria-label="Sprache">
@@ -517,10 +528,32 @@ footer a { color: var(--ink-2); }
         <p class="eyebrow" data-de="Ausprobieren">Try it</p>
         <h2 data-de="So sieht ein Fokus-Check aus">What a focus check looks like</h2>
         <p class="lede prose" data-de="Tippen Sie auf den Knopf unter dem Telefon. Foxpace fragt, ob das Kind noch bei der Mission ist, und bietet Hilfe an, wenn es nicht weiterkommt.">Tap the button under the phone. Foxpace asks if the child is still on the mission and offers help if they’re stuck.</p>
+        <div class="pulse-why prose">
+          <h3 data-de="Warum der Bildschirm pulsiert">Why the screen pulses</h3>
+          <p data-de="Wenn ein Fokus-Check erscheint, wird der Bildschirm langsam dunkler und wieder heller. Das ist leise und erschreckt nicht. Das Kind kann den Check in seinem eigenen Tempo bemerken, bevor etwas Lauteres kommt.">When a focus check appears, the screen slowly dims and brightens again. It’s quiet and doesn’t startle. The child can notice the check in their own time, before anything louder happens.</p>
+        </div>
+        <div class="escalate stack">
+          <div>
+            <span class="when" data-de="Zuerst">First</span>
+            <h3 data-de="Ein sanftes Lichtpulsieren">A gentle light pulse</h3>
+            <p data-de="Der Bildschirm pulsiert sanft.">The screen softly pulses.</p>
+          </div>
+          <div>
+            <span class="when" data-de="Nach 20 Sekunden">After 20 seconds</span>
+            <h3 data-de="Ton und Vibration">Sound and vibration</h3>
+            <p data-de="Ein sanfter Ton und Vibration, abgemildert für geräuschempfindliche Kinder.">A gentle sound and vibration, softened for sound-sensitive children.</p>
+          </div>
+          <div>
+            <span class="when" data-de="Im Unterricht">In class</span>
+            <h3 data-de="Nur visuell">Keep it visual</h3>
+            <p data-de="Ton und Vibration ausschalten. Das Pulsieren bleibt.">Turn off sound and vibration. The pulse stays.</p>
+          </div>
+        </div>
       </div>
       <div class="demo" aria-label="Try a focus check" data-de-aria-label="Fokus-Check ausprobieren">
         <div class="phone">
           <div class="screen">
+            <div class="pulse" id="pulse" aria-hidden="true"></div>
             <div class="app" id="app">
               <div class="sb" aria-hidden="true"><span>16:05</span><span class="sb-icons"><i></i><i></i></span></div>
 
@@ -711,34 +744,7 @@ footer a { color: var(--ink-2); }
     </div>
   </section>
 
-  <section class="band alt" id="reminders">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow" data-de="In der Schule und zu Hause">At school and at home</p>
-        <h2 data-de="Erinnerungen, die leise beginnen">Reminders that start quiet</h2>
-        <p class="lede prose" data-de="Erst leise. Lauter nur, wenn nötig.">Quiet first. Louder only if needed.</p>
-      </div>
-      <div class="escalate">
-        <div>
-          <span class="when" data-de="Zuerst">First</span>
-          <h3 data-de="Ein sanftes Lichtpulsieren">A gentle light pulse</h3>
-          <p data-de="Der Bildschirm pulsiert sanft.">The screen softly pulses.</p>
-        </div>
-        <div>
-          <span class="when" data-de="Nach 20 Sekunden">After 20 seconds</span>
-          <h3 data-de="Ton und Vibration">Sound and vibration</h3>
-          <p data-de="Ein sanfter Ton und Vibration, abgemildert für geräuschempfindliche Kinder.">A gentle sound and vibration, softened for sound-sensitive children.</p>
-        </div>
-        <div>
-          <span class="when" data-de="Im Unterricht">In class</span>
-          <h3 data-de="Nur visuell">Keep it visual</h3>
-          <p data-de="Ton und Vibration ausschalten. Das Pulsieren bleibt.">Turn off sound and vibration. The pulse stays.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band" id="missions">
+  <section class="band alt" id="missions">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow" data-de="Missionen">Missions</p>
@@ -754,7 +760,7 @@ footer a { color: var(--ink-2); }
     </div>
   </section>
 
-  <section class="band alt" id="widget">
+  <section class="band" id="widget">
     <div class="wrap widget-section">
       <div class="widget-copy">
         <p class="eyebrow" data-de="Widget">Widget</p>
@@ -783,7 +789,7 @@ footer a { color: var(--ink-2); }
     </div>
   </section>
 
-  <section class="band" id="faq">
+  <section class="band alt" id="faq">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow" data-de="Fragen">Questions</p>
@@ -828,7 +834,7 @@ footer a { color: var(--ink-2); }
 
   <!-- Try it on Android + contact, in one place. Before Google Play is ready, families sign up with this form.
        When Play is ready, add the two-step join (testers group link + Google Play testing link) above the form. -->
-  <section class="band alt join" id="contact">
+  <section class="band join" id="contact">
     <div class="wrap">
       <div class="art-disc"><img src="art/fox-looking-up.svg" alt="The Foxpace fox looking up" data-de-alt="Der Foxpace-Fuchs schaut nach oben"></div>
       <div class="join-body">
@@ -1033,7 +1039,7 @@ footer a { color: var(--ink-2); }
     en: {
       reading: "Reading", paused: "Reading paused", startSmall: "Start small",
       focus: "",
-      check: "<strong>A focus check.</strong> None of the answers is wrong.",
+      check: "<strong>A focus check.</strong> The screen pulses gently. None of the answers is wrong.",
       continue: "<strong>Back to the mission.</strong> The next check comes after another 10 minutes of focus.",
       stuck: "<strong>I'm stuck.</strong> The child picks one thing to try.",
       startsmall: "<strong>Start small.</strong> A 2-minute goal. Easier to begin than the whole task.",
@@ -1045,7 +1051,7 @@ footer a { color: var(--ink-2); }
     de: {
       reading: "Lesen", paused: "Lesen pausiert", startSmall: "Klein anfangen",
       focus: "",
-      check: "<strong>Ein Fokus-Check.</strong> Keine der Antworten ist falsch.",
+      check: "<strong>Ein Fokus-Check.</strong> Der Bildschirm pulsiert sanft. Keine der Antworten ist falsch.",
       continue: "<strong>Zurück zur Mission.</strong> Der nächste Check kommt nach weiteren 10 Minuten Konzentration.",
       stuck: "<strong>Ich komme nicht weiter.</strong> Das Kind wählt eine Sache aus, die es ausprobiert.",
       startsmall: "<strong>Klein anfangen.</strong> Ein Ziel von 2 Minuten. Leichter zu beginnen als die ganze Aufgabe.",
@@ -1068,6 +1074,7 @@ footer a { color: var(--ink-2); }
       el.hidden = !on;
       if (on) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
     });
+    $("pulse").classList.toggle("on", id === "st-check");
     $("btn-check").disabled = id !== "st-timer" || s.mode !== "focus";
   }
   function render() {
