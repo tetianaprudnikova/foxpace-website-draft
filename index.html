@@ -3,69 +3,1057 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
-<title>Foxpace</title>
+<meta name="description" content="Foxpace helps children start a task, stay with it and finish it. Free, no account, everything stays on the phone.">
 <link rel="icon" type="image/png" href="art/app-icon-192.png">
+<style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<title>Foxpace: focus support for children</title>
 <style>
-/* Holding page. No external fonts, cookies or scripts from other sites. */
+/* Fonts are served from this website (fonts/), not from Google: nothing loads from other sites.
+   Latin subsets of the app's own fonts (SIL Open Font License, see fonts/OFL-*.txt). */
+@font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/inter-500.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/inter-600.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-500.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/space-grotesk-600.woff2") format("woff2"); }
+@font-face { font-family: "Lexend"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/lexend-400.woff2") format("woff2"); }
+@font-face { font-family: "Lexend"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/lexend-600.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/atkinson-hyperlegible-next-400.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/atkinson-hyperlegible-next-600.woff2") format("woff2"); }
+/* Layout: one calm column that follows the mission loop (start → check in → stuck → pause → finish),
+   with the app's own Warm palette, Space Grotesk + Inter, and Tetiana's art on light "paper" discs. */
 :root {
-  --canvas: #FFF9F2; --ink: #2E241F; --ink-2: #6F5E54; --line: #D8C8BA; --accent: #C35427;
-  color-scheme: light;
+  --canvas: #FFF9F2;
+  --surface: #FFFDF8;
+  --subtle: #F3EADF;
+  --sunk: #E6D5C6;
+  --ink: #2E241F;
+  --ink-2: #6F5E54;
+  --ink-3: #8F7B6E;
+  --line: #D8C8BA;
+  --line-strong: #BDAA9A;
+  --action: #C35427;
+  --action-pressed: #A9491F;
+  --action-ink: #FFFFFF;
+  --link: #C35427;
+  --fox: #E97832;
+  --leaf: #5F7652;
+  --leaf-bg: #E7EDDF;
+  --paper: #F3EADF;
+  --paper-on-alt: #FFFDF8;
+  --tbd-bg: #FFF1D6;
+  --tbd-ink: #7A4A00;
+  --ring: #C35427;
+  --mark: #FBD3B4;
+
+  /* The phone mock-ups show the app as it really looks (Warm, light), so these never switch theme. */
+  --app-canvas: #FFF9F2;
+  --app-surface: #FFFDF8;
+  --app-subtle: #F3EADF;
+  --app-sunk: #E6D5C6;
+  --app-ink: #2E241F;
+  --app-ink-2: #6F5E54;
+  --app-ink-3: #8F7B6E;
+  --app-line: #D8C8BA;
+  --app-action: #C35427;
+  --app-fox: #E97832;
+  --app-frame: #2E241F;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --step-0: 1.0625rem;  /* 17px body */
+  --step-1: 1.25rem;
+  --step-2: 1.625rem;
+  --step-3: clamp(1.9rem, 4.2vw, 2.6rem);
+  --step-4: clamp(2.3rem, 6vw, 3.6rem);
 }
 @media (prefers-color-scheme: dark) {
-  :root { --canvas: #1C1612; --ink: #F5EBE1; --ink-2: #CDBBAD; --line: #4A3C33; --accent: #F0A06A; color-scheme: dark; }
+  :root:not([data-theme="light"]) {
+    --canvas: #1C1612; --surface: #261E19; --subtle: #30261F; --sunk: #3D3129;
+    --ink: #F5EBE1; --ink-2: #CDBBAD; --ink-3: #A8968A; --line: #4A3C33; --line-strong: #645247;
+    --action: #E88A4E; --action-pressed: #F09A5E; --action-ink: #1C1612; --link: #F0A06A;
+    --fox: #E97832; --leaf: #A9C29A; --leaf-bg: #2B3326; --paper: #F3EADF;
+    --tbd-bg: #3A2C14; --tbd-ink: #F5CF8A; --ring: #F0A06A; --mark: #7A3E1C;
+    color-scheme: dark;
+  }
 }
+:root[data-theme="dark"] {
+  --canvas: #1C1612; --surface: #261E19; --subtle: #30261F; --sunk: #3D3129;
+  --ink: #F5EBE1; --ink-2: #CDBBAD; --ink-3: #A8968A; --line: #4A3C33; --line-strong: #645247;
+  --action: #E88A4E; --action-pressed: #F09A5E; --action-ink: #1C1612; --link: #F0A06A;
+  --fox: #E97832; --leaf: #A9C29A; --leaf-bg: #2B3326; --paper: #F3EADF;
+  --tbd-bg: #3A2C14; --tbd-ink: #F5CF8A; --ring: #F0A06A; --mark: #7A3E1C;
+  color-scheme: dark;
+}
+
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
-  background: var(--canvas); color: var(--ink);
-  font: 400 1.0625rem/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  display: flex; flex-direction: column; min-height: 100%;
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
-.lang { align-self: flex-end; display: flex; gap: 4px; }
-.lang button {
-  font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--ink-2); background: none;
-  border: 1px solid transparent; border-radius: 8px; padding: 6px 10px; min-height: 44px; min-width: 44px; cursor: pointer;
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); line-height: 1.3; }
+p { margin: 0; }
+a { color: var(--link); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--fox); outline-offset: 3px; border-radius: 6px; }
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.lang button[aria-pressed="true"] { color: var(--ink); border-color: var(--line); }
-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding-bottom: 8vh; }
-main img { width: 132px; height: auto; margin-bottom: 12px; }
-h1 { font-size: clamp(2rem, 7vw, 2.75rem); font-weight: 650; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
-p { margin: 0; color: var(--ink-2); font-size: 1.15rem; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.prose { max-width: 62ch; }
+.lede { font-size: var(--step-1); line-height: 1.5; color: var(--ink-2); }
+.muted { color: var(--ink-2); }
+.eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+
+/* Draft markers */
+.draftbar { background: var(--tbd-bg); color: var(--tbd-ink); font-size: 0.9rem; }
+.draftbar .wrap { padding-block: 10px; display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: baseline; }
+.tbd { display: inline-block; background: var(--tbd-bg); color: var(--tbd-ink); border: 1px dashed currentColor; border-radius: 6px; padding: 1px 8px; font-size: 0.85rem; font-weight: 500; line-height: 1.5; }
+
+/* Header */
+.site-head { border-bottom: 1px solid var(--line); background: var(--canvas); }
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; flex-wrap: wrap; }
+.wordmark { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+/* The app icon (assets/app-icons/icon.png), with phone-icon rounded corners. */
+.wordmark .app-icon { width: 40px; height: 40px; border-radius: 10px; display: block; flex: none; box-shadow: 0 0 0 1px var(--line); }
+.site-nav { display: flex; gap: 4px 20px; flex-wrap: wrap; font-weight: 500; font-size: 0.98rem; }
+.site-nav a { color: var(--ink-2); text-decoration: none; padding: 8px 0; }
+.site-nav a:hover { color: var(--ink); text-decoration: underline; }
+.head-r { display: flex; align-items: center; gap: 12px 24px; }
+
+/* Buttons (match the app: 6px radius, Inter 600 18/24) */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px 22px; border-radius: 6px; font: 600 1.05rem/1.4 var(--font-body); text-decoration: none; border: 2px solid transparent; cursor: pointer; }
+.btn-primary { background: var(--action); color: var(--action-ink); }
+.btn-primary:hover { background: var(--action-pressed); }
+.btn-secondary { background: transparent; color: var(--link); border-color: var(--link); }
+.btn-secondary:hover { background: var(--subtle); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 48px; align-items: center; padding-block: 56px 72px; }
+.hero h1 { font-size: var(--step-4); letter-spacing: -0.02em; }
+/* "one thing": a soft marker stroke behind the lower half of the words. */
+.ringed {
+  white-space: nowrap; padding: 0 0.08em; margin: 0 -0.04em; border-radius: 0.12em;
+  background: linear-gradient(transparent 56%, var(--mark) 56%, var(--mark) 92%, transparent 92%);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.hero-copy { display: grid; gap: 24px; min-width: 0; }
+.hero-note { font-size: 0.95rem; color: var(--ink-3); }
+
+/* Phone demo. The screen is laid out at the app's real 360×800 dp size
+   (Figma "Mission – In Progress Timed" 736:5952, Focus Check 255:9403, Stuck 255:9472,
+   Paused Timed 772:7305) and scaled down to fit the phone frame. */
+.demo { display: grid; justify-items: center; gap: 14px; min-width: 0; }
+.phone {
+  width: 300px; max-width: 100%;
+  background: var(--app-frame); border-radius: 38px; padding: 8px;
+  box-shadow: 0 24px 48px -24px rgba(46,36,31,0.45);
+}
+.screen { width: 284px; height: 631px; border-radius: 30px; overflow: hidden; position: relative; background: var(--app-canvas); }
+.app {
+  width: 360px; height: 800px; transform: scale(0.78889); transform-origin: 0 0;
+  position: relative; background: var(--app-canvas); color: var(--app-ink);
+  font-family: var(--font-body); font-size: 18px; line-height: 26px;
+}
+.sb { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 14px; color: var(--app-ink); font-variant-numeric: tabular-nums; }
+.sb-icons { display: flex; gap: 4px; align-items: center; }
+.sb-icons i { display: block; width: 14px; height: 10px; border-radius: 2px; background: var(--app-ink); }
+.sb-icons i:first-child { width: 12px; height: 12px; border-radius: 50% 50% 2px 50%; transform: rotate(45deg); }
+.st { position: absolute; inset: 40px 0 0; display: flex; flex-direction: column; }
+.st.enter { animation: fadein 280ms ease-out; }
+@keyframes fadein { from { opacity: 0.2; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .st.enter { animation: none; } }
+
+/* Timer screen */
+.hdr { padding: 24px 16px 16px; display: flex; align-items: center; justify-content: space-between; }
+.hdr-l { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.hdr h4 { margin: 0; font: 600 24px/24px var(--font-display); color: var(--app-ink); white-space: nowrap; }
+.ib { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center; color: var(--app-ink); flex: none; }
+.ib.outline { border: 1px solid var(--app-action); color: var(--app-action); }
+.ib svg { width: 24px; height: 24px; display: block; }
+.hdr-count { font: 600 20px/24px var(--font-display); color: var(--app-action); font-variant-numeric: tabular-nums; }
+.app-divider { margin: 0 16px; border-top: 1px solid var(--app-line); }
+.timer { position: relative; width: 240px; height: 240px; margin: 72px auto 0; }
+.timer > svg { position: absolute; inset: 0; width: 240px; height: 240px; }
+.t-total { position: absolute; top: 51px; left: 0; right: 0; text-align: center; font-size: 18px; line-height: 26px; color: var(--app-ink); font-variant-numeric: tabular-nums; }
+.t-value { position: absolute; top: 96px; left: 0; right: 0; text-align: center; font: 600 52px/56px var(--font-display); letter-spacing: -1.04px; color: var(--app-ink-2); font-variant-numeric: tabular-nums; }
+.paused .t-total, .paused .t-value { opacity: 0.4; }
+.t-ctrl { position: absolute; top: 172px; left: 98px; width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--app-action); background: transparent; display: grid; place-items: center; padding: 0; color: var(--app-action); }
+.t-ctrl svg { width: 20px; height: 20px; display: block; }
+button.t-ctrl { cursor: pointer; }
+.slider { margin: 48px 16px 0; height: 54px; border: 1px solid var(--app-line); border-radius: 12px; background: var(--app-surface); display: flex; align-items: center; padding: 4px; }
+.slider-knob { width: 44px; height: 44px; border-radius: 8px; background: var(--app-action); display: grid; place-items: center; color: #fff; flex: none; }
+.slider-knob svg { width: 20px; height: 20px; display: block; }
+.slider > span:last-child { flex: 1; text-align: center; font: 600 18px/24px var(--font-body); color: var(--app-ink-3); padding-right: 16px; }
+.drawer { position: absolute; left: 0; right: 0; bottom: 0; background: var(--app-surface); border-top: 1px solid var(--app-line); padding: 16px 16px 48px; display: grid; gap: 24px; }
+.drawer-handle { justify-self: center; width: 38px; height: 8px; }
+.drawer-rows { display: grid; gap: 16px; }
+.drawer-row { display: flex; justify-content: space-between; align-items: center; font: 600 16px/20px var(--font-body); }
+.drawer-rows hr { margin: 0; border: 0; border-top: 1px solid var(--app-line); }
+.sw { width: 48px; height: 24px; border-radius: 12px; background: var(--app-sunk); position: relative; }
+.sw::after { content: ""; position: absolute; right: 4px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--app-ink-2); }
+
+/* Dialog screens (Focus Check, Stuck) */
+.dlg { padding: 64px 16px 32px; align-items: center; text-align: center; }
+.dlg-art { width: 160px; height: 160px; }
+.dlg h4 { margin: 24px 0 0; font: 600 24px/24px var(--font-display); color: var(--app-ink); }
+.dlg-sub { margin-top: 8px; color: var(--app-ink-2); }
+.metric { margin-top: 24px; width: 280px; background: var(--app-surface); border: 1px solid var(--app-line); border-radius: 12px; padding: 20px 16px 16px; display: grid; gap: 6px; }
+.metric b { font: 600 18px/26px var(--font-display); color: var(--app-ink); }
+.metric span { font: 600 52px/56px var(--font-display); letter-spacing: -1.04px; color: var(--app-ink-2); font-variant-numeric: tabular-nums; }
+.dlg-actions { margin-top: auto; width: 100%; display: grid; gap: 12px; }
+.a-btn { min-height: 48px; border-radius: 6px; font: 600 18px/24px var(--font-body); cursor: pointer; padding: 12px; width: 100%; border: 1px solid var(--app-action); background: transparent; color: var(--app-action); }
+.a-btn.primary { background: var(--app-action); color: #fff; }
+/* Tertiary (Figma Button Hierarchy=Tertiary): no fill, no outline, accent label. */
+.a-btn.tertiary { border-color: transparent; }
+.a-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.a-help { color: var(--app-ink-2); margin-top: -4px; }
+.a-label { color: var(--app-ink-2); margin-top: 12px; }
+.dlg-actions.stuck { gap: 8px; }
+.dlg-actions.stuck .gap { height: 8px; }
+.a-btn:focus-visible, .t-ctrl:focus-visible, button.ib:focus-visible { outline: 3px solid var(--app-fox); outline-offset: 2px; }
+
+/* Ring, handle and dialog colours as classes, so the dark mission screen can override them. */
+.ring-track { stroke: var(--app-sunk); }
+.ring-arc { stroke: var(--app-fox); }
+.timer.paused .ring-arc { stroke: var(--app-sunk); }
+.handle-line { stroke: #BDAA9A; }
+.dlg { background: var(--app-canvas); }
+button.ib { background: transparent; padding: 0; cursor: pointer; }
+.app, .app * { transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
+@media (prefers-reduced-motion: reduce) { .app, .app * { transition: none; } }
+/* Dark Mission screen: the app's Warm "mission dark/*" colours (src/theme/colorThemes.ts). */
+.app.dark { background: #211E1B; color: #F6EFE6; }
+.app.dark .sb, .app.dark .hdr h4, .app.dark .ib { color: #F6EFE6; }
+.app.dark .sb-icons i { background: #F6EFE6; }
+.app.dark .ib.outline, .app.dark .t-ctrl, .app.dark .hdr-count { border-color: #F09B61; color: #F09B61; }
+.app.dark .app-divider { border-color: #584A41; }
+.app.dark .t-total { color: #F6EFE6; }
+.app.dark .t-value { color: #D6C5B8; }
+.app.dark .ring-track { stroke: #433A33; }
+.app.dark .ring-arc { stroke: #E88A4D; }
+.app.dark .timer.paused .ring-arc { stroke: #433A33; }
+.app.dark .slider { background: #2E2925; border-color: #584A41; }
+.app.dark .slider-knob { background: #F09B61; color: #231D18; }
+.app.dark .slider > span:last-child { color: #B5A499; }
+.app.dark .drawer { background: #2E2925; border-color: #584A41; }
+.app.dark .drawer-row { color: #F6EFE6; }
+.app.dark .drawer-rows hr { border-top-color: #584A41; }
+.app.dark .sw { background: #A88B73; }
+.app.dark .sw::after { background: #241D18; }
+.app.dark .handle-line { stroke: #8F7E6F; }
+/* Adjustable text: the same greeting in each app Font (src/theme/typography.ts), crossfading slowly. */
+.type-demo { position: relative; height: 92px; background: var(--canvas); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.type-sample { position: absolute; inset: 0; padding: 12px 14px; display: grid; align-content: center; gap: 2px; opacity: 0; transition: opacity 500ms ease; color: var(--ink); }
+.type-sample.on { opacity: 1; }
+.type-sample b { font-weight: 600; font-size: 1.2rem; line-height: 1.3; }
+.type-sample span { font-weight: 400; font-size: 0.98rem; line-height: 1.45; color: var(--ink-2); }
+.type-sample[data-style="default"] b { font-family: "Space Grotesk", var(--font-body); }
+.type-sample[data-style="default"] span { font-family: "Inter", var(--font-body); }
+.type-sample[data-style="relaxed"] b, .type-sample[data-style="relaxed"] span { font-family: "Lexend", var(--font-body); }
+.type-sample[data-style="relaxed"] b { line-height: 1.5; }
+.type-sample[data-style="relaxed"] span { line-height: 1.75; }
+.type-sample[data-style="easy"] b, .type-sample[data-style="easy"] span { font-family: "Atkinson Hyperlegible Next", var(--font-body); }
+.type-tabs { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.type-tabs button { background: none; border: 0; padding: 6px 0; font: 500 0.85rem/1.3 var(--font-body); color: var(--ink-3); cursor: pointer; border-bottom: 2px solid transparent; }
+.type-tabs button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--link); }
+@media (prefers-reduced-motion: reduce) { .type-sample { transition: none; } }
+/* Background noise picker preview: the app's Mission controls panel (Figma 772:6664), silent. */
+.noise-peek { background: var(--app-surface); border: 1px solid var(--app-line); border-radius: 10px; padding: 12px; display: grid; gap: 10px; color: var(--app-ink); }
+.noise-head { display: flex; justify-content: space-between; align-items: center; font: 600 0.9rem/1.3 var(--font-body); }
+.noise-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.noise-chips button { border: 0; border-radius: 4px; padding: 5px 8px; font: 600 0.82rem/1.25 var(--font-body); background: var(--app-sunk); color: var(--app-ink-2); cursor: pointer; }
+.noise-chips button[aria-pressed="true"] { background: var(--app-ink-2); color: #FFFFFF; }
+.noise-chips button:focus-visible { outline: 3px solid var(--app-fox); outline-offset: 2px; }
+.peek-note { font-size: 0.8rem; color: var(--ink-3); }
+/* Language switch (EN / DE). */
+.lang { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; flex: none; }
+.lang button { background: transparent; border: 0; min-width: 44px; min-height: 40px; padding: 0 10px; font: 600 0.85rem/1 var(--font-body); letter-spacing: 0.04em; color: var(--ink-2); cursor: pointer; }
+.lang button + button { border-left: 1px solid var(--line-strong); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); }
+.lang button:focus-visible { outline: 3px solid var(--fox); outline-offset: -3px; }
+/* Joining the test: a real two-step sequence, so it is numbered. */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: step; max-width: 620px; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.steps li::before { content: counter(step); width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--subtle); color: var(--ink-2); font: 600 0.95rem/1 var(--font-display); }
+.steps .step-text { min-width: 0; color: var(--ink-2); }
+.steps .step-text b { color: var(--ink); font-weight: 600; }
+.steps .btn { white-space: nowrap; }
+@media (max-width: 560px) { .steps li { grid-template-columns: 32px minmax(0, 1fr); } .steps .btn { grid-column: 2; justify-self: start; } }
+/* Parents waiting list. */
+.waitlist { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 48px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+.waitlist h2 { font-size: var(--step-2); }
+.waitlist-copy { display: grid; gap: 8px; min-width: 0; }
+.waitlist-form { display: grid; gap: 8px; min-width: 0; }
+.waitlist-form label { font-weight: 600; font-size: 0.95rem; }
+.waitlist-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.waitlist-row input { flex: 1 1 220px; min-width: 0; min-height: 52px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--canvas); color: var(--ink); padding: 0 14px; font: 400 1rem/1.4 var(--font-body); }
+.waitlist-row input:focus-visible { outline: 3px solid var(--fox); outline-offset: 1px; }
+.waitlist-note { font-size: 0.85rem; color: var(--ink-3); }
+.contact-form, .contact-mail { align-self: start; }
+.contact-mail { display: grid; gap: 14px; }
+.contact-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.contact-form label { margin-top: 6px; }
+.contact-form .optional { font-weight: 400; color: var(--ink-3); }
+.contact-form input, .contact-form select, .contact-form textarea { width: 100%; min-height: 52px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--canvas); color: var(--ink); padding: 12px 14px; font: inherit; }
+.contact-form textarea { resize: vertical; min-height: 120px; }
+.contact-form input:focus-visible, .contact-form select:focus-visible, .contact-form textarea:focus-visible { outline: 3px solid var(--fox); outline-offset: 1px; }
+.waitlist-status { font-size: 0.9rem; color: var(--ink-2); }
+@media (max-width: 760px) { .waitlist { grid-template-columns: minmax(0, 1fr); padding: 20px; } }
+.demo-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn-small { min-height: 44px; padding: 8px 16px; font-size: 0.98rem; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.demo-caption { max-width: 34ch; text-align: center; font-size: 0.95rem; color: var(--ink-2); min-height: 4.8em; }
+.demo-caption strong { color: var(--ink); font-weight: 600; }
+.demo-label { font-size: 0.8rem; color: var(--ink-3); }
+
+/* Sections */
+section.band { padding-block: 72px; }
+section.band.alt { background: var(--subtle); }
+.section-head { display: grid; gap: 14px; margin-bottom: 36px; }
+
+
+/* Feature rows: art + text */
+.feature { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; align-items: center; }
+.feature + .feature { margin-top: 64px; }
+.art-disc { width: 220px; max-width: 100%; aspect-ratio: 1; border-radius: 50%; background: var(--paper); display: grid; place-items: center; }
+.art-disc img { width: 62%; height: auto; }
+.feature-body { display: grid; gap: 16px; min-width: 0; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pair > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 4px; }
+.pair b { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; }
+.pair span { color: var(--ink-2); font-size: 0.95rem; }
+
+/* Reminder escalation */
+.escalate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.escalate > div { padding: 18px 18px 20px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.escalate > div + div { border-left: 1px solid var(--line); }
+.escalate .when { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.escalate h3 { font-size: 1.1rem; }
+.escalate p { font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
+
+/* Missions types */
+.types { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.types > div { border-top: 3px solid var(--line-strong); padding-top: 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.types .ex { font-size: 0.9rem; color: var(--ink-3); }
+.types p { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; }
+/* Home screen widget: not a mission type, so it sits below the types on its own surface. */
+.widget-note { margin-top: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 6px; max-width: 620px; }
+.widget-note p { color: var(--ink-2); font-size: 0.97rem; line-height: 1.5; }
+
+/* Principles */
+.principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; }
+.principles > div { display: grid; gap: 6px; min-width: 0; }
+.principles p { color: var(--ink-2); }
+
+/* Comfort settings */
+.comfort { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 36px; }
+.comfort > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+/* The theme previews sit centred in the space under the heading, so the card doesn't look top-heavy beside its taller neighbours. */
+.comfort > .themes-card { display: flex; flex-direction: column; gap: 16px; }
+.themes-card .swatches { margin-block: auto; padding-block: 8px; }
+/* Three equal columns, so the circles sit evenly whatever the label length. */
+.swatches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.swatch { display: grid; gap: 6px; justify-items: center; align-content: start; text-align: center; font-size: 0.8rem; line-height: 1.3; color: var(--ink-2); }
+/* A tiny screen in each Colours theme: its canvas, two text lines and a primary button (src/theme/colorThemes.ts). */
+.mini { width: 56px; height: 76px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--c); padding: 9px 7px 7px; display: flex; flex-direction: column; gap: 5px; }
+.mini b { display: block; height: 5px; border-radius: 2px; background: var(--t); }
+.mini b + b { width: 65%; opacity: 0.6; }
+.mini u { display: block; margin-top: auto; height: 13px; border-radius: 3px; background: var(--a); }
+.fontlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; color: var(--ink-2); font-size: 0.95rem; }
+
+/* Privacy */
+.privacy { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.facts li { display: grid; grid-template-columns: 1.5em minmax(0, 1fr); gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.facts li::before { content: "✓"; color: var(--leaf); font-weight: 700; }
+.facts b { font-weight: 600; }
+.facts span { display: block; color: var(--ink-2); font-size: 0.95rem; }
+
+/* FAQ */
+.faq { display: grid; gap: 0; border-top: 1px solid var(--line); max-width: 760px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { cursor: pointer; list-style: none; padding: 18px 40px 18px 0; position: relative; font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 6px; top: 14px; font-size: 1.5rem; color: var(--link); font-weight: 500; }
+.faq details[open] summary::after { content: "–"; }
+.faq details > div { padding: 0 0 20px; color: var(--ink-2); max-width: 62ch; display: grid; gap: 10px; }
+
+/* Join */
+.join .wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: center; }
+.join .art-disc { width: 180px; }
+/* On a beige band the paper disc would disappear, so it uses the lighter canvas beige there. */
+.band.alt .art-disc { background: var(--paper-on-alt); }
+.join-body { display: grid; gap: 18px; min-width: 0; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; align-items: center; font-size: 0.92rem; color: var(--ink-3); }
+footer nav { display: flex; gap: 8px 20px; flex-wrap: wrap; }
+footer a { color: var(--ink-2); }
+
+@media (max-width: 920px) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 40px 56px; }
+  .types { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
+  .comfort { grid-template-columns: minmax(0, 1fr); }
+  .privacy { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+@media (max-width: 680px) {
+  section.band { padding-block: 52px; }
+  .feature { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .feature .art-disc { width: 150px; }
+  .pair, .principles { grid-template-columns: minmax(0, 1fr); }
+  .escalate { grid-template-columns: minmax(0, 1fr); }
+  .escalate > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .join .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .join .art-disc { width: 140px; }
+  .site-nav { display: none; }
+}
+@media (max-width: 440px) {
+}
 </style>
+
 </head>
 <body>
-<div class="lang" role="group" aria-label="Language">
-  <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
-  <button type="button" data-lang="de" lang="de" aria-pressed="false">DE</button>
-</div>
+<header class="site-head">
+  <div class="wrap">
+    <a class="wordmark" href="#top" id="top">
+      <img class="app-icon" src="art/app-icon-192.png" width="40" height="40" alt="">
+      Foxpace
+    </a>
+    <div class="head-r">
+      <nav class="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+        <a href="#made-for" data-de="Für wen">Who it's for</a>
+        <a href="#privacy" data-de="Datenschutz">Privacy</a>
+        <a href="#school" data-de="In der Schule">At school</a>
+        <a href="#faq" data-de="Fragen">Questions</a>
+      </nav>
+      <div class="lang" role="group" aria-label="Language" data-de-aria-label="Sprache">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="de" aria-pressed="false" lang="de">DE</button>
+      </div>
+    </div>
+  </div>
+</header>
+
 <main>
-  <img src="art/fox-default.svg" alt="" width="132" height="154">
-  <h1>Foxpace</h1>
-  <p id="soon">Coming soon.</p>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow" data-de="Konzentrationshilfe für Kinder">Focus support for children</p>
+        <h1 data-de="Hilfe, bei &lt;span class=&quot;ringed&quot;&gt;einer Sache&lt;/span&gt; zu bleiben, bis sie erledigt ist.">Help to stay with <span class="ringed">one thing</span> until it's done.</h1>
+        <p class="lede prose" data-de="Foxpace hilft Kindern, eine Aufgabe zu beginnen, dabeizubleiben und sie abzuschließen. Es fragt behutsam nach und hilft, wenn sie nicht weiterkommen.">Foxpace helps children start a task, stay with it and finish it. It checks in gently and helps when they're stuck.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#join" data-de="Vorab ausprobieren">Try it early</a>
+        </div>
+        <p class="hero-note" data-de="Android voraussichtlich ab Dezember 2026, iPhone ab Anfang 2027.">Android planned for December 2026, iPhone for early 2027.</p>
+      </div>
+
+      <div class="demo" aria-label="Try a focus check" data-de-aria-label="Fokus-Check ausprobieren">
+        <div class="phone">
+          <div class="screen">
+            <div class="app" id="app">
+              <div class="sb" aria-hidden="true"><span>16:05</span><span class="sb-icons"><i></i><i></i></span></div>
+
+              <!-- Running, paused and Start small all use the timer screen -->
+              <div class="st" id="st-timer">
+                <div class="hdr">
+                  <div class="hdr-l">
+                    <span class="ib" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/></svg></span>
+                    <h4 id="hdr-title">Reading</h4>
+                  </div>
+                  <button class="ib outline" type="button" id="hdr-sun" aria-label="Dark mode" data-de-aria-label="Dunkler Modus" aria-pressed="false" title="Dark mode" data-de-title="Dunkler Modus"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.33" stroke="currentColor" stroke-width="1.5"/><path d="M12 3.67V5.33M12 18.67V20.33M6.11 6.11L7.28 7.28M16.72 16.72L17.89 17.89M3.67 12H5.33M18.67 12H20.33M7.28 16.72L6.11 17.89M17.89 6.11L16.72 7.28" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+                  <span class="hdr-count" id="hdr-count" hidden>5:00</span>
+                </div>
+                <div class="app-divider"></div>
+                <div class="timer" id="timer">
+                  <svg viewBox="0 0 240 240" aria-hidden="true">
+                    <circle class="ring-track" cx="120" cy="120" r="114" fill="none" stroke-width="6"></circle>
+                    <circle id="ring-arc" class="ring-arc" cx="120" cy="120" r="114" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="716.28" stroke-dashoffset="716.28" transform="rotate(-90 120 120)"></circle>
+                  </svg>
+                  <div class="t-total" id="t-total">25:00</div>
+                  <div class="t-value" id="t-value" aria-live="off">18:42</div>
+                  <span class="t-ctrl" id="t-pause" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 15.83H8.33V4.17H5V15.83ZM11.67 4.17V15.83H15V4.17H11.67Z" fill="currentColor"/></svg></span>
+                  <button class="t-ctrl" id="t-play" type="button" aria-label="Continue the mission" data-de-aria-label="Mission fortsetzen" hidden><svg viewBox="0 0 24 24"><defs><linearGradient id="playGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EA3A00"/><stop offset="1" stop-color="#FB6800"/></linearGradient></defs><path d="M19.81 11.18C20.39 11.58 20.39 12.42 19.81 12.82L7.57 21.3C6.91 21.76 6 21.29 6 20.48V3.52C6 2.71 6.91 2.24 7.57 2.7L19.81 11.18Z" fill="url(#playGrad)"/></svg></button>
+                </div>
+                <div class="slider" aria-hidden="true">
+                  <span class="slider-knob"><svg viewBox="0 0 20 20"><path d="M7.08 4.17H3.33L7.5 10L3.33 15.83H7.08L11.25 10L7.08 4.17Z" fill="currentColor"/><path d="M12.92 4.17H9.17L13.33 10L9.17 15.83H12.92L17.08 10L12.92 4.17Z" fill="currentColor"/></svg></span>
+                  <span data-de="Zum Beenden wischen">Slide to finish</span>
+                </div>
+                <div class="drawer" aria-hidden="true">
+                  <svg class="drawer-handle" viewBox="0 0 38 8"><path class="handle-line" d="M2 6.5C8 3 13 1.5 19 1.5C25 1.5 30 3 36 6.5" fill="none" stroke-width="2.5" stroke-linecap="round"/></svg>
+                  <div class="drawer-rows">
+                    <div class="drawer-row"><span data-de="Hintergrundgeräusch">Background noise</span> <span class="sw"></span></div>
+                    <hr>
+                    <div class="drawer-row"><span data-de="Fokus-Check">Focus check</span> <span class="sw"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Focus Check -->
+              <div class="st dlg" id="st-check" hidden>
+                <img class="dlg-art" src="art/focus-check.svg" alt="">
+                <h4 data-de="Hallo Mia,">Hey Mia,</h4>
+                <p class="dlg-sub" data-de="Arbeitest du noch an der Mission?">Are you still working on the mission?</p>
+                <div class="metric"><b data-de="Verbleibende Zeit">Time left</b><span id="check-time">18:42</span></div>
+                <div class="dlg-actions">
+                  <button class="a-btn primary" type="button" data-go="continue" data-de="Ja, weiter">Yes, continue</button>
+                  <button class="a-btn" type="button" data-go="stuck" data-de="Ich komme nicht weiter">I'm stuck</button>
+                  <p class="a-label" data-de="Brauchst du eine Pause?">Need a break?</p>
+                  <div class="a-row">
+                    <button class="a-btn tertiary" type="button" data-go="small" data-de="Kleine Pause">Small pause</button>
+                    <button class="a-btn tertiary" type="button" data-go="big" data-de="Große Pause">Big pause</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- I'm stuck -->
+              <div class="st dlg" id="st-stuck" hidden>
+                <img class="dlg-art" src="art/stuck.svg" alt="">
+                <h4 data-de="Du kommst nicht weiter? Das ist okay.">Stuck? It’s okay.</h4>
+                <p class="dlg-sub" data-de="Wähle eine Sache aus:">Choose one thing to try:</p>
+                <div class="dlg-actions stuck">
+                  <button class="a-btn primary" type="button" data-go="startsmall" data-de="Klein anfangen">Start small</button>
+                  <p class="a-help" data-de="Nur 2 Minuten probieren">Try for 2 minutes only</p>
+                  <div class="gap"></div>
+                  <button class="a-btn" type="button" data-go="small" data-de="Pause machen">Take a pause</button>
+                  <p class="a-help" data-de="5 Minuten, um dich zu entspannen, zu bewegen oder jemanden in der Nähe um Hilfe zu bitten">5 minutes to relax, move, or ask someone nearby for help</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-controls">
+          <button class="btn btn-secondary btn-small" type="button" id="btn-check" data-de="Fokus-Check zeigen">Show a focus check</button>
+        </div>
+        <p class="demo-caption" id="demo-caption" aria-live="polite"></p>
+        <p class="demo-label" data-de="Interaktives Beispiel. Name und Mission sind ausgedacht.">Interactive example. The name and mission are made up.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="made-for">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-de="Für wen">Who it's for</p>
+        <h2 data-de="Für neurodivergente Kinder und ihre Familien">Made for neurodivergent children and their families</h2>
+        <p class="lede prose" data-de="Für Kinder mit ADHS, Autismus und alle, die Unterstützung brauchen, um bei einer Aufgabe zu bleiben.">For children with ADHD, autism, or anyone who needs help staying on task.</p>
+      </div>
+      <div class="principles">
+        <div><h3 data-de="Auf einen Blick klar">Clear at a glance</h3><p data-de="Nichts zu rätseln, wenn die Konzentration nachlässt.">Nothing to work out when focus is low.</p></div>
+        <div><h3 data-de="Immer nur eine Entscheidung">One decision at a time</h3><p data-de="Nur das, was gerade hilft.">Only what's useful right now.</p></div>
+        <div><h3 data-de="Von Grund auf ruhig">Calm by default</h3><p data-de="Sanfte Farben, langsame Bewegung, kein Blinken.">Soft colours, slow movement, no flashing.</p></div>
+        <div><h3 data-de="Das Kind entscheidet">The child is in charge</h3><p data-de="Es bestimmt, wann es anfängt, pausiert und aufhört.">They decide when to start, pause and stop.</p></div>
+        <div>
+          <h3 data-de="Unterstützung statt Punktezählen">Support, not scorekeeping</h3>
+          <p data-de="Keine Punkte, Serien oder Noten.">No points, streaks or grades.</p>
+        </div>
+        <div><h3 data-de="Barrierefrei von Anfang an">Accessible from the start</h3><p data-de="Große Tippflächen, skalierbare Schrift, Screenreader-Unterstützung.">Large tap targets, scalable text, screen reader support.</p></div>
+      </div>
+
+      <div class="comfort">
+        <div class="themes-card">
+          <h3 data-de="Drei Farbthemen">Three colour themes</h3>
+          <p class="muted" data-de="Wählen Sie die Farben, die sich am angenehmsten anfühlen.">Pick the colours that feel most comfortable.</p>
+          <div class="swatches">
+            <span class="swatch"><span class="mini" style="--c:#FFF9F2;--t:#2E241F;--a:#C35427" aria-hidden="true"><b></b><b></b><u></u></span><span data-de="Warm">Warm</span></span>
+            <span class="swatch"><span class="mini" style="--c:#F2F8F6;--t:#17384C;--a:#006D8F" aria-hidden="true"><b></b><b></b><u></u></span><span data-de="Kühl">Cool</span></span>
+            <span class="swatch"><span class="mini" style="--c:#FFFFFF;--t:#000000;--a:#000000" aria-hidden="true"><b></b><b></b><u></u></span><span data-de="Hoher Kontrast">High Contrast</span></span>
+          </div>
+        </div>
+        <div>
+          <h3 data-de="Anpassbare Schrift">Adjustable text</h3>
+          <p class="muted" data-de="Wählen Sie den Schriftstil, der sich am angenehmsten anfühlt, darunter Schriften, die für leichteres Lesen gestaltet wurden.">Choose the text style that feels most comfortable, including fonts designed for easier reading.</p>
+          <div class="type-demo" aria-hidden="true">
+            <div class="type-sample on" data-style="default"><b data-de="Hallo Mia,">Hey Mia,</b><span data-de="Bereit für deine Mission?">Ready for your mission?</span></div>
+            <div class="type-sample" data-style="relaxed"><b data-de="Hallo Mia,">Hey Mia,</b><span data-de="Bereit für deine Mission?">Ready for your mission?</span></div>
+            <div class="type-sample" data-style="easy"><b data-de="Hallo Mia,">Hey Mia,</b><span data-de="Bereit für deine Mission?">Ready for your mission?</span></div>
+          </div>
+          <div class="type-tabs" role="group" aria-label="Text style examples" data-de-aria-label="Beispiele für Schriftstile">
+            <button type="button" id="type-tab-default" data-i="0" aria-pressed="true" data-de="Standard">Default</button>
+            <button type="button" id="type-tab-relaxed" data-i="1" aria-pressed="false" data-de="Entspanntes Lesen">Relaxed reading</button>
+            <button type="button" id="type-tab-easy" data-i="2" aria-pressed="false" data-de="Leichtes Lesen">Easy reading</button>
+          </div>
+        </div>
+        <div>
+          <h3 data-de="Hintergrundgeräusche">Background sounds</h3>
+          <p class="muted" data-de="So bearbeitet, dass sie gleichmäßig und sanft bleiben.">Edited to stay steady and gentle.</p>
+          <div class="noise-peek">
+            <div class="noise-head"><span data-de="Hintergrundgeräusch">Background noise</span><span class="sw" aria-hidden="true"></span></div>
+            <div class="noise-chips" role="group" aria-label="Background noise examples (silent preview)" data-de-aria-label="Beispiele für Hintergrundgeräusche (stumme Vorschau)">
+              <button type="button" aria-pressed="false" data-de="Weißes Rauschen">White noise</button>
+              <button type="button" aria-pressed="true" data-de="Braunes Rauschen">Brown noise</button>
+              <button type="button" aria-pressed="false" data-de="Uhrticken">Clock ticking</button>
+              <button type="button" aria-pressed="false" data-de="Meereswellen">Sea waves</button>
+              <button type="button" aria-pressed="false" data-de="Regen">Rain</button>
+              <button type="button" aria-pressed="false" data-de="Industriegeräusch">Industrial noise</button>
+            </div>
+          </div>
+          <p class="peek-note" data-de="Vorschau der Auswahl. Hier wird kein Ton abgespielt.">Preview of the picker. No sound plays here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="privacy">
+    <div class="wrap privacy">
+      <div class="section-head" style="margin:0">
+        <p class="eyebrow" data-de="Datenschutz">Privacy</p>
+        <h2 data-de="Alles bleibt auf dem Gerät">Everything stays on the phone</h2>
+        <p class="lede prose" data-de="Kein Konto. Keine Anmeldung.">No account. Nothing to sign in to.</p>
+        <p class="muted"><a href="privacy.html" data-de-href="datenschutz.html" data-de="Datenschutzerklärung lesen">Read the privacy policy</a></p>
+      </div>
+      <ul class="facts">
+        <li><div><b data-de="Für immer kostenlos">Free forever</b></div></li>
+        <li><div><b data-de="Kein Konto, keine Anmeldung">No account or login</b></div></li>
+        <li><div><b data-de="Funktioniert offline">Works offline</b></div></li>
+        <li><div><b data-de="Missionen werden auf dem Gerät gespeichert">Missions are saved on the device</b></div></li>
+        <li><div><b data-de="Keine Werbung">No ads</b></div></li>
+        <li><div><b data-de="Kein Chat, keine sozialen Funktionen">No chat or social features</b></div></li>
+        <li><div><b data-de="Kein Standortzugriff">No location</b></div></li>
+        <li><div><b data-de="Erinnerungen bleiben lokal">Reminders are local</b></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band alt" id="stuck">
+    <div class="wrap">
+      <div class="feature">
+        <div class="art-disc"><img src="art/stuck.svg" alt="Illustration for the I'm stuck screen" data-de-alt="Illustration für den Bildschirm „Ich komme nicht weiter“"></div>
+        <div class="feature-body">
+          <p class="eyebrow" data-de="Wenn es schwer wird">When it gets hard</p>
+          <h2 data-de="„Ich komme nicht weiter“ ist eine echte Antwort">“I’m stuck” is a real answer</h2>
+          <p class="prose muted" data-de="Sie ist eine der Hauptantworten, nie versteckt.">It's one of the main answers, never a hidden option.</p>
+          <div class="pair">
+            <div><b data-de="Klein anfangen">Start small</b><span data-de="Nur 2 Minuten probieren.">Try for just 2 minutes.</span></div>
+            <div><b data-de="Pause machen">Take a pause</b><span data-de="5 Minuten, um sich zu bewegen, auszuruhen oder um Hilfe zu bitten.">5 minutes to move, rest or ask for help.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="art-disc"><img src="art/hourglass.svg" alt="Hourglass illustration for pauses" data-de-alt="Sanduhr-Illustration für Pausen"></div>
+        <div class="feature-body">
+          <p class="eyebrow" data-de="Pausen">Pauses</p>
+          <h2 data-de="Eine Pause gehört dazu">A pause is part of the plan</h2>
+          <p class="prose muted" data-de="5 oder 15 Minuten. Keine Warnungen, kein verlorener Fortschritt.">Take 5 or 15 minutes. No warnings, no lost progress.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="school">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-de="In der Schule und zu Hause">At school and at home</p>
+        <h2 data-de="Erinnerungen, die leise beginnen">Reminders that start quiet</h2>
+        <p class="lede prose" data-de="Erst leise. Lauter nur, wenn nötig.">Quiet first. Louder only if needed.</p>
+      </div>
+      <div class="escalate">
+        <div>
+          <span class="when" data-de="Zuerst">First</span>
+          <h3 data-de="Ein sanftes Lichtpulsieren">A gentle light pulse</h3>
+          <p data-de="Der Bildschirm pulsiert sanft.">The screen softly pulses.</p>
+        </div>
+        <div>
+          <span class="when" data-de="Nach 20 Sekunden">After 20 seconds</span>
+          <h3 data-de="Ton und Vibration">Sound and vibration</h3>
+          <p data-de="Ein sanfter Ton und Vibration, abgemildert für geräuschempfindliche Kinder.">A gentle sound and vibration, softened for sound-sensitive children.</p>
+        </div>
+        <div>
+          <span class="when" data-de="Im Unterricht">In class</span>
+          <h3 data-de="Nur visuell">Keep it visual</h3>
+          <p data-de="Ton und Vibration ausschalten. Das Pulsieren bleibt.">Turn off sound and vibration. The pulse stays.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="missions">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-de="Missionen">Missions</p>
+        <h2 data-de="Vorausplanen oder sofort loslegen">Plan ahead, or start right now</h2>
+        <p class="lede prose" data-de="Kinder können ihre eigenen planen.">Children can plan their own.</p>
+      </div>
+      <div class="types">
+        <div><h3 data-de="Einmalig">Once</h3><p data-de="Heute, morgen oder an einem gewählten Datum.">Today, tomorrow or a chosen date.</p></div>
+        <div><h3 data-de="Wiederholt">Repeats</h3><p data-de="Täglich, an Wochentagen oder an gewählten Tagen.">Every day, weekdays, or chosen days.</p></div>
+        <div><h3 data-de="Jederzeit">Anytime</h3><p data-de="Gespeichert und jederzeit bereit.">Saved, ready whenever.</p></div>
+        <div><h3 data-de="Freier Fokus">Free Focus</h3><p data-de="Nur ein Timer. Kein Name nötig.">Just a timer. No name needed.</p></div>
+      </div>
+      <div class="widget-note">
+        <h3 data-de="Auf dem Startbildschirm">On the home screen</h3>
+        <p data-de="Die nächste Mission bleibt im Blick, ohne die App zu öffnen.">The next mission stays in view, without opening the app.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-de="Fragen">Questions</p>
+        <h2 data-de="Häufige Fragen">Common questions</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary data-de="Für welches Alter ist Foxpace?">What age is Foxpace for?</summary>
+          <div><p data-de="Für jedes Alter. Foxpace ist für Kinder gestaltet und eignet sich genauso für Jugendliche und Erwachsene.">Any age. Foxpace is designed for children, and works just as well for teenagers and adults.</p></div>
+        </details>
+        <details>
+          <summary data-de="Ist es eine To-do-Liste?">Is it a to-do list?</summary>
+          <div><p data-de="Auch. Kinder können Missionen planen und sehen, was erledigt ist. Foxpace kann außerdem während der Aufgabe helfen, mit Fokus-Checks und Hilfe, wenn sie nicht weiterkommen.">It can be. Children can plan missions and see them done. Foxpace can also help during the task, with focus checks and help when they’re stuck.</p></div>
+        </details>
+        <details>
+          <summary data-de="Kann ein Kind es im Unterricht nutzen?">Can a child use it in class?</summary>
+          <div><p data-de="Ja. Ton und Vibration ausschalten, dann bleiben die Erinnerungen visuell.">Yes. Turn off sound and vibration, and reminders stay visual.</p></div>
+        </details>
+        <details>
+          <summary data-de="Braucht es Internet?">Does it need the internet?</summary>
+          <div><p data-de="Nein. Es funktioniert offline.">No. It works offline.</p></div>
+        </details>
+        <details>
+          <summary data-de="Gibt es ein Widget für den Startbildschirm?">Is there a home screen widget?</summary>
+          <div><p data-de="Ja. Es zeigt die nächste Mission und ihre Uhrzeit. Ein Tipp darauf öffnet die Details der Mission, ein Timer startet nie von selbst. Missionsnamen sind auf dem Startbildschirm sichtbar.">Yes. It shows the next mission and its time. Tapping it opens the mission’s details; it never starts a timer. Mission titles are visible on the home screen.</p></div>
+        </details>
+        <details>
+          <summary data-de="Kann ich sehen, was mein Kind gemacht hat?">Can a parent see what my child did?</summary>
+          <div><p data-de="Nein. Alles bleibt auf dem Gerät des Kindes.">No. Everything stays on the child's device.</p></div>
+        </details>
+        <details>
+          <summary data-de="Was kostet es?">How much does it cost?</summary>
+          <div><p data-de="Nichts. Foxpace ist für immer kostenlos.">Nothing. Foxpace is free forever.</p></div>
+        </details>
+        <details>
+          <summary data-de="Gibt es eine iPhone-Version?">Is there an iPhone version?</summary>
+          <div><p data-de="Sie ist für Anfang 2027 geplant.">It’s planned for early 2027.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt join" id="join">
+    <div class="wrap">
+      <div class="art-disc"><img src="art/fox-looking-up.svg" alt="The Foxpace fox looking up" data-de-alt="Der Foxpace-Fuchs schaut nach oben"></div>
+      <div class="join-body">
+        <h2 data-de="Foxpace auf Android ausprobieren">Try Foxpace on Android</h2>
+        <!-- Before Google Play is ready: families sign up through the contact form.
+             When Play is ready, replace this block with the two-step join (testers group link + Google Play testing link). -->
+        <p class="lede prose" data-de="Der Test auf Google Play startet bald. Melden Sie sich an, dann schicken wir Ihnen per E-Mail den Link, sobald es losgeht.">Testing on Google Play opens soon. Sign up, and we'll email you the link when it starts.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contact" data-topic="test" data-de="Zum Test anmelden">Sign up for testing</a>
+        </div>
+        <p class="muted" data-de="Der Test richtet sich an Eltern und Betreuungspersonen. Zum Installieren brauchen Sie ein Google-Konto.">Testing is for parents and carers. You'll need a Google account to install the test version.</p>
+      </div>
+    </div>
+  </section>
+  <!-- Hidden until the Brevo sign-up form is connected. Also add its privacy paragraph back. -->
+  <section class="band" id="parents" hidden>
+    <div class="wrap">
+      <div class="waitlist">
+        <div class="waitlist-copy">
+          <h2 data-de="Foxpace für Eltern kommt bald.">Foxpace for parents is coming.</h2>
+          <p class="lede" data-de="Wir schicken Ihnen eine E-Mail, sobald es fertig ist.">Get an email when it’s ready.</p>
+        </div>
+        <form class="waitlist-form" id="waitlist-form" novalidate>
+          <label for="waitlist-email" data-de="E-Mail-Adresse">Email address</label>
+          <div class="waitlist-row">
+            <input id="waitlist-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com">
+            <button class="btn btn-primary" type="submit" data-de="Benachrichtigen">Notify me</button>
+          </div>
+          <p class="waitlist-note" data-de="Wir schreiben Ihnen nur zu Foxpace für Eltern. Abmelden ist jederzeit möglich.">We’ll only email you about Foxpace for parents. Unsubscribe any time.</p>
+          <p class="waitlist-status" id="waitlist-status" role="status" hidden></p>
+          <p><span class="tbd" data-de="Entwurf: Anmeldedienst wählen (mit Double-Opt-in)">Draft: choose the sign-up service (with double opt-in)</span></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="contact">
+    <div class="wrap">
+      <div class="waitlist">
+        <div class="waitlist-copy">
+          <h2 data-de="Kontakt">Contact</h2>
+          <p class="lede" data-de="Fragen, Rückmeldungen oder Anmeldung zum Android-Test. Wir antworten per E-Mail.">Questions, feedback, or signing up for the Android test. We'll reply by email.</p>
+          <p class="muted" data-de="Oder schreiben Sie an &lt;a href=&quot;mailto:hello@foxpace.de&quot;&gt;hello@foxpace.de&lt;/a&gt;.">Or write to <a href="mailto:hello@foxpace.de">hello@foxpace.de</a>.</p>
+        </div>
+        <!-- Shown while the form service isn't connected (data-endpoint is empty). -->
+        <div class="contact-mail" id="contact-mail" hidden>
+          <div class="actions">
+            <a class="btn btn-primary" href="mailto:hello@foxpace.de?subject=Android%20test" data-de-href="mailto:hello@foxpace.de?subject=Android-Test" data-de="Per E-Mail zum Test anmelden">Sign up for testing by email</a>
+            <a class="btn btn-secondary" href="mailto:hello@foxpace.de" data-de="E-Mail schreiben">Write to us</a>
+          </div>
+          <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre E-Mail-Adresse nur, um zu antworten oder Ihnen den Test-Link zu schicken, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your email address only to reply or to send you the test link, and delete it afterwards. <a href="privacy.html">Privacy</a></p>
+        </div>
+        <!-- data-endpoint: the Formward form URL, e.g. https://forms.formward.eu/f/<id>. Empty = show the email fallback. -->
+        <form class="waitlist-form contact-form" id="contact-form" data-endpoint="" action="" method="post" novalidate>
+          <div class="hp" aria-hidden="true"><label for="contact-gotcha">Leave empty</label><input id="contact-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
+          <label for="contact-topic" data-de="Worum geht es?">What is it about?</label>
+          <select id="contact-topic" name="topic">
+            <option value="question" data-de="Frage oder Rückmeldung">Question or feedback</option>
+            <option value="test" data-de="Anmeldung zum Android-Test">Sign up for the Android test</option>
+          </select>
+          <label for="contact-name"><span data-de="Name">Name</span> <span class="optional" data-de="(freiwillig)">(optional)</span></label>
+          <input id="contact-name" name="name" type="text" autocomplete="name">
+          <label for="contact-email" data-de="E-Mail-Adresse">Email address</label>
+          <input id="contact-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com">
+          <label for="contact-message"><span data-de="Nachricht">Message</span> <span class="optional" id="contact-message-optional" data-de="(freiwillig)">(optional)</span></label>
+          <textarea id="contact-message" name="message" rows="5"></textarea>
+          <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre Angaben nur, um zu antworten oder Ihnen den Test-Link zu schicken, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your details only to reply or to send you the test link, and delete them afterwards. <a href="privacy.html">Privacy</a></p>
+          <div><button class="btn btn-primary" type="submit" data-de="Senden">Send</button></div>
+          <p class="waitlist-status" id="contact-status" role="status" hidden></p>
+        </form>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span data-de="Foxpace. Konzentrationshilfe für Kinder.">Foxpace. Focus support for children.</span>
+    <nav aria-label="Footer" data-de-aria-label="Fußzeile">
+      <a href="privacy.html" data-de-href="datenschutz.html" data-de="Datenschutzerklärung">Privacy policy</a>
+      <a href="#faq" data-de="Fragen">Questions</a>
+      <a href="#contact" data-de="Kontakt">Contact</a>
+      <a href="impressum.html" data-de="Impressum">Legal notice</a>
+    </nav>
+  </div>
+</footer>
+
 <script>
-// Same language key as the full site. Stored only in this browser, never sent anywhere.
+// Language: English or German. Starts from a saved choice, else the browser language; the choice is remembered.
 (function () {
-  var text = { en: "Coming soon.", de: "Bald verfügbar." };
-  function set(lang) {
-    document.documentElement.lang = lang;
-    document.getElementById("soon").textContent = text[lang];
-    document.querySelectorAll(".lang button").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+  var root = document.documentElement;
+  var ATTRS = ["aria-label", "alt", "title", "href"];
+  function apply(lang) {
+    root.lang = lang;
+    document.querySelectorAll("[data-de]").forEach(function (el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+      el.innerHTML = lang === "de" ? el.dataset.de : el.dataset.en;
     });
+    ATTRS.forEach(function (a) {
+      document.querySelectorAll("[data-de-" + a + "]").forEach(function (el) {
+        var key = "data-en-" + a;
+        if (!el.hasAttribute(key)) el.setAttribute(key, el.getAttribute(a) || "");
+        el.setAttribute(a, lang === "de" ? el.getAttribute("data-de-" + a) : el.getAttribute(key));
+      });
+    });
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-lang") === lang ? "true" : "false");
+    });
+    window.dispatchEvent(new CustomEvent("fp-lang", { detail: lang }));
   }
   var saved = null;
   try { saved = localStorage.getItem("foxpace-lang"); } catch (e) {}
-  set(saved === "de" || saved === "en" ? saved : (/^de/i.test(navigator.language || "") ? "de" : "en"));
+  var start = saved === "de" || saved === "en" ? saved : (/^de\b/i.test(navigator.language || "") ? "de" : "en");
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () {
-      set(b.dataset.lang);
-      try { localStorage.setItem("foxpace-lang", b.dataset.lang); } catch (e) {}
+      var lang = b.getAttribute("data-lang");
+      try { localStorage.setItem("foxpace-lang", lang); } catch (e) {}
+      apply(lang);
     });
   });
+  apply(start);
+})();
+</script>
+<script>
+// Adjustable text example: changes style every 3 s; stops after a tap, and never auto-changes with reduced motion.
+(function () {
+  var samples = document.querySelectorAll(".type-sample"), tabs = document.querySelectorAll(".type-tabs button");
+  var i = 0, timer = null;
+  function show(n) {
+    i = n;
+    samples.forEach(function (el, k) { el.classList.toggle("on", k === n); });
+    tabs.forEach(function (b, k) { b.setAttribute("aria-pressed", k === n ? "true" : "false"); });
+  }
+  tabs.forEach(function (b) {
+    b.addEventListener("click", function () { if (timer) { clearInterval(timer); timer = null; } show(+b.getAttribute("data-i")); });
+  });
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) timer = setInterval(function () { show((i + 1) % samples.length); }, 3000);
+})();
+</script>
+<script>
+// Background noise preview: choosing a sound only moves the selection. Nothing on this page plays audio.
+(function () {
+  var chips = document.querySelectorAll(".noise-chips button");
+  chips.forEach(function (b) {
+    b.addEventListener("click", function () {
+      chips.forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    });
+  });
+})();
+</script>
+<script>
+// Waiting list: not connected to a sign-up service yet, so it only checks the address and says so.
+(function () {
+  var form = document.getElementById("waitlist-form"), input = document.getElementById("waitlist-email"), status = document.getElementById("waitlist-status");
+  var TEXT = {
+    en: { bad: "Please enter an email address.", draft: "Thanks! This is a draft, so nothing was sent yet." },
+    de: { bad: "Bitte geben Sie eine E-Mail-Adresse ein.", draft: "Danke! Dies ist ein Entwurf, es wurde noch nichts gesendet." }
+  };
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var t = TEXT[document.documentElement.lang === "de" ? "de" : "en"];
+    status.hidden = false;
+    status.textContent = input.checkValidity() && input.value.trim() ? t.draft : t.bad;
+  });
+  window.addEventListener("fp-lang", function () { status.hidden = true; });
+})();
+</script>
+<script>
+// Contact form. With a form service address in data-endpoint it sends the message; without one it hides itself
+// and shows the email buttons instead. "Sign up for testing" buttons open it with the test topic chosen.
+// A question needs a message; a test sign-up doesn't.
+(function () {
+  var form = document.getElementById("contact-form"), mail = document.getElementById("contact-mail"),
+      topic = document.getElementById("contact-topic"), email = document.getElementById("contact-email"),
+      message = document.getElementById("contact-message"), optional = document.getElementById("contact-message-optional"),
+      status = document.getElementById("contact-status"), endpoint = form.getAttribute("data-endpoint");
+  if (!endpoint) { form.hidden = true; mail.hidden = false; return; }
+  form.action = endpoint;
+  var TEXT = {
+    en: { email: "Please enter an email address.", message: "Please write your question or feedback.", sending: "Sending…",
+          sent: "Thank you. Your message is on its way, and we'll reply by email.", failed: "Sorry, that didn't work. Please write to hello@foxpace.de instead." },
+    de: { email: "Bitte geben Sie eine E-Mail-Adresse ein.", message: "Bitte schreiben Sie Ihre Frage oder Rückmeldung.", sending: "Wird gesendet …",
+          sent: "Danke. Ihre Nachricht ist unterwegs, wir antworten per E-Mail.", failed: "Das hat leider nicht geklappt. Bitte schreiben Sie an hello@foxpace.de." }
+  };
+  var SUBJECT = { test: "Foxpace: Android test sign-up", question: "Foxpace: question or feedback" };
+  function sync() { optional.hidden = topic.value !== "test"; message.required = topic.value !== "test"; }
+  topic.addEventListener("change", sync);
+  document.querySelectorAll("a[data-topic]").forEach(function (a) {
+    a.addEventListener("click", function () { topic.value = a.getAttribute("data-topic"); sync(); });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var t = TEXT[document.documentElement.lang === "de" ? "de" : "en"];
+    status.hidden = false;
+    if (!email.value.trim() || !email.checkValidity()) { status.textContent = t.email; email.focus(); return; }
+    if (message.required && !message.value.trim()) { status.textContent = t.message; message.focus(); return; }
+    var data = new FormData(form);
+    data.append("_subject", SUBJECT[topic.value] || SUBJECT.question);
+    data.append("language", document.documentElement.lang);
+    var button = form.querySelector('button[type="submit"]');
+    button.disabled = true; status.textContent = t.sending;
+    fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); status.textContent = t.sent; form.reset(); sync(); })
+      .catch(function () { status.textContent = t.failed; })
+      .then(function () { button.disabled = false; });
+  });
+  window.addEventListener("fp-lang", function () { status.hidden = true; });
+  sync();
+})();
+</script>
+<script>
+(function () {
+  var CIRC = 716.28; // 2π × 114
+  var WORDS = {
+    en: {
+      reading: "Reading", paused: "Reading paused", startSmall: "Start small",
+      focus: "",
+      check: "<strong>A focus check.</strong> None of the answers is wrong.",
+      continue: "<strong>Back to the mission.</strong> The next check comes after another 10 minutes of focus.",
+      stuck: "<strong>I'm stuck.</strong> The child picks one thing to try.",
+      startsmall: "<strong>Start small.</strong> A 2-minute goal. Easier to begin than the whole task.",
+      small: "<strong>A 5-minute pause.</strong> The pause counts down at the top. Tap the play button to go back.",
+      big: "<strong>A 15-minute pause.</strong> For a longer rest. The mission waits.",
+      dark: "<strong>Dark mode.</strong> The sun button switches the mission screen to dark, for evenings or a dim room.",
+      light: ""
+    },
+    de: {
+      reading: "Lesen", paused: "Lesen pausiert", startSmall: "Klein anfangen",
+      focus: "",
+      check: "<strong>Ein Fokus-Check.</strong> Keine der Antworten ist falsch.",
+      continue: "<strong>Zurück zur Mission.</strong> Der nächste Check kommt nach weiteren 10 Minuten Konzentration.",
+      stuck: "<strong>Ich komme nicht weiter.</strong> Das Kind wählt eine Sache aus, die es ausprobiert.",
+      startsmall: "<strong>Klein anfangen.</strong> Ein Ziel von 2 Minuten. Leichter zu beginnen als die ganze Aufgabe.",
+      small: "<strong>Eine 5-Minuten-Pause.</strong> Die Pause zählt oben herunter. Mit der Play-Taste geht es zurück.",
+      big: "<strong>Eine 15-Minuten-Pause.</strong> Für eine längere Erholung. Die Mission wartet.",
+      dark: "<strong>Dunkler Modus.</strong> Die Sonnen-Taste stellt den Missionsbildschirm auf dunkel, für den Abend oder einen dunklen Raum.",
+      light: ""
+    }
+  };
+  function W(k) { return WORDS[document.documentElement.lang === "de" ? "de" : "en"][k]; }
+  var caption = "focus";
+  function setCaption(k) { caption = k; document.getElementById("demo-caption").innerHTML = W(k); }
+  var s = { dark: false, mode: "focus", focusTotal: 25 * 60, focusLeft: 18 * 60 + 42, smallLeft: null, pauseLeft: 0 };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function fmt(sec) { var m = Math.floor(sec / 60), r = sec % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+  function show(id) {
+    ["st-timer", "st-check", "st-stuck"].forEach(function (k) {
+      var el = $(k), on = k === id;
+      el.hidden = !on;
+      if (on) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
+    });
+    $("btn-check").disabled = id !== "st-timer" || s.mode !== "focus";
+  }
+  function render() {
+    var startSmall = s.smallLeft !== null;
+    var paused = s.mode === "pause";
+    var left = startSmall ? s.smallLeft : s.focusLeft;
+    var total = startSmall ? 120 : s.focusTotal;
+    $("t-total").textContent = fmt(total);
+    $("t-value").textContent = fmt(left);
+    $("check-time").textContent = fmt(s.focusLeft);
+    // Progress is the elapsed share, drawn clockwise from the top (as in the app).
+    $("ring-arc").setAttribute("stroke-dashoffset", String(CIRC * (left / total)));
+    $("timer").classList.toggle("paused", paused);
+    $("hdr-title").textContent = paused ? W("paused") : startSmall ? W("startSmall") : W("reading");
+    $("hdr-sun").hidden = paused;
+    $("hdr-count").hidden = !paused;
+    $("hdr-count").textContent = fmt(s.pauseLeft);
+    $("t-pause").hidden = paused;
+    $("t-play").hidden = !paused;
+    // Dark mode only changes the timer screen, as in the app; Focus Check and Stuck stay light.
+    $("app").classList.toggle("dark", s.dark && (s.mode === "focus" || s.mode === "pause"));
+    $("hdr-sun").setAttribute("aria-pressed", s.dark ? "true" : "false");
+  }
+  function go(key) {
+    if (key === "check") { s.mode = "check"; show("st-check"); }
+    else if (key === "stuck") { s.mode = "stuck"; show("st-stuck"); }
+    else if (key === "continue") { s.mode = "focus"; s.smallLeft = null; show("st-timer"); }
+    else if (key === "startsmall") { s.mode = "focus"; s.smallLeft = 120; show("st-timer"); }
+    else if (key === "small" || key === "big") { s.mode = "pause"; s.pauseLeft = key === "small" ? 300 : 900; show("st-timer"); }
+    render();
+    setCaption(key);
+  }
+
+  $("btn-check").addEventListener("click", function () { go("check"); });
+  $("t-play").addEventListener("click", function () { go("continue"); });
+  $("hdr-sun").addEventListener("click", function () {
+    s.dark = !s.dark;
+    render();
+    setCaption(s.dark ? "dark" : "light");
+  });
+  document.querySelectorAll("[data-go]").forEach(function (b) {
+    b.addEventListener("click", function () { go(b.getAttribute("data-go")); });
+  });
+
+  setInterval(function () {
+    if (s.mode === "focus") {
+      if (s.smallLeft !== null) { if (s.smallLeft > 0) s.smallLeft--; }
+      else if (s.focusLeft > 0) s.focusLeft--;
+    } else if (s.mode === "pause" && s.pauseLeft > 0) {
+      s.pauseLeft--;
+    }
+    render();
+  }, 1000);
+  window.addEventListener("fp-lang", function () { render(); setCaption(caption); });
+  render();
+  setCaption("focus");
 })();
 </script>
 </body>

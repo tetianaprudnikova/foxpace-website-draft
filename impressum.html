@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Impressum · Foxpace</title>
+<link rel="icon" type="image/png" href="art/app-icon-192.png">
+<style>
+/* Legal page for foxpace.de. System fonts only: nothing is loaded from other sites. */
+:root {
+  --canvas: #FFF9F2; --surface: #FFFDF8; --ink: #2E241F; --ink-2: #6F5E54; --line: #D8C8BA; --link: #C35427;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --canvas: #1C1612; --surface: #261E19; --ink: #F5EBE1; --ink-2: #CDBBAD; --line: #4A3C33; --link: #F0A06A; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--canvas); color: var(--ink);
+  font: 400 1.0625rem/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.wrap {
+  max-width: 720px; margin: 0 auto;
+  padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+a { color: var(--link); text-underline-offset: 3px; }
+.back { font-weight: 600; }
+.lang { display: flex; gap: 4px; }
+.lang button {
+  font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--ink-2); background: none;
+  border: 1px solid transparent; border-radius: 8px; padding: 6px 10px; min-height: 44px; min-width: 44px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { color: var(--ink); border-color: var(--line); }
+h1 { font-size: clamp(1.9rem, 5vw, 2.4rem); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 20px; }
+h2 { font-size: 1.3rem; line-height: 1.25; margin: 40px 0 10px; }
+h3 { font-size: 1.05rem; margin: 24px 0 6px; }
+p, ul { margin: 0 0 14px; max-width: 65ch; }
+ul { padding-left: 1.2em; }
+address { font-style: normal; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 0 0 14px; max-width: 65ch; }
+.muted { color: var(--ink-2); font-size: 0.95rem; }
+:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="./" data-l="back">← Foxpace</a>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" data-lang="de" lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <!-- German is the legally relevant version. English is a courtesy translation.
+       The address is a c/o business address. Never put a home address here. -->
+  <main lang="de" data-section="de">
+    <h1>Impressum</h1>
+    <p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG):</p>
+    <address>
+      Tetiana Prudnikova<br>
+      c/o GAM<br>
+      Pappelallee 64<br>
+      10437 Berlin<br>
+      Deutschland
+    </address>
+    <h2>Kontakt</h2>
+    <p>E-Mail: <a href="mailto:hello@foxpace.de">hello@foxpace.de</a><br>
+    Kontaktformular: <a href="./#contact">foxpace.de/#contact</a></p>
+    <p>Datenschutz: <a href="datenschutz.html">Datenschutzerklärung</a></p>
+  </main>
+
+  <main lang="en" data-section="en" hidden>
+    <h1>Legal notice</h1>
+    <p>Information under § 5 of the German Digital Services Act (DDG):</p>
+    <address>
+      Tetiana Prudnikova<br>
+      c/o GAM<br>
+      Pappelallee 64<br>
+      10437 Berlin<br>
+      Germany
+    </address>
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:hello@foxpace.de">hello@foxpace.de</a><br>
+    Contact form: <a href="./#contact">foxpace.de/#contact</a></p>
+    <p>Privacy: <a href="privacy.html">Privacy policy</a></p>
+  </main>
+</div>
+<script>
+// Same language key as the rest of foxpace.de. German is the default here because it is the legally relevant version,
+// unless the visitor already chose English.
+(function () {
+  function set(lang) {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-section]").forEach(function (s) { s.hidden = s.dataset.section !== lang; });
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+    document.title = (lang === "de" ? "Impressum" : "Legal notice") + " · Foxpace";
+  }
+  var saved = null;
+  try { saved = localStorage.getItem("foxpace-lang"); } catch (e) {}
+  set(saved === "en" ? "en" : "de");
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      set(b.dataset.lang);
+      try { localStorage.setItem("foxpace-lang", b.dataset.lang); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>
