@@ -536,7 +536,7 @@ footer a { color: var(--ink-2); }
         <h1 data-de="Hilfe, bei &lt;span class=&quot;ringed&quot;&gt;einer Sache&lt;/span&gt; zu bleiben, bis sie erledigt ist.">Help to stay with <span class="ringed">one thing</span> until it's done.</h1>
         <p class="lede prose" data-de="Foxpace hilft Kindern, eine Aufgabe zu beginnen, dabeizubleiben und sie abzuschließen. Es fragt behutsam nach und hilft, wenn sie nicht weiterkommen.">Foxpace helps children start a task, stay with it and finish it. It checks in gently and helps when they're stuck.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#contact" data-topic="test" data-de="Vorab ausprobieren">Try it early</a>
+          <a class="btn btn-primary" href="#contact" data-de="Vorab ausprobieren">Try it early</a>
         </div>
         <ul class="promises" aria-label="Privacy" data-de-aria-label="Datenschutz">
           <li data-de="Funktioniert komplett offline">Works fully offline</li>
@@ -873,30 +873,37 @@ footer a { color: var(--ink-2); }
     </div>
   </section>
 
-  <!-- Try it on Android + contact, in one place. Before Google Play is ready, families sign up with this form.
-       When Play is ready, add the two-step join (testers group link + Google Play testing link) above the form. -->
+  <!-- Try it on Android + contact, in one place. Two-step join: the testers group, then Google Play's testing page. -->
   <section class="band join" id="contact">
     <div class="wrap">
       <div class="art-disc"><img src="art/fox-looking-up.svg" alt="The Foxpace fox looking up" data-de-alt="Der Foxpace-Fuchs schaut nach oben"></div>
       <div class="join-body">
         <h2 data-de="Foxpace auf Android ausprobieren">Try Foxpace on Android</h2>
-        <p class="lede prose" data-de="Der Test auf Google Play startet bald. Melden Sie sich hier an, dann schicken wir Ihnen den Link per E-Mail, sobald es losgeht.">Testing on Google Play opens soon. Sign up here, and we'll email you the link when it starts.</p>
-        <p class="muted prose" data-de="Der Test richtet sich an Eltern und Betreuungspersonen. Zum Installieren brauchen Sie ein Google-Konto. Für Fragen oder Rückmeldungen nutzen Sie dasselbe Formular oder schreiben an &lt;a href=&quot;mailto:hello@foxpace.de&quot;&gt;hello@foxpace.de&lt;/a&gt;.">Testing is for parents and carers. You'll need a Google account to install the test version. For questions or feedback, use the same form or write to <a href="mailto:hello@foxpace.de">hello@foxpace.de</a>.</p>
+        <p class="lede prose" data-de="Der Test auf Google Play läuft. Er richtet sich an Eltern und Betreuungspersonen und dauert zwei Schritte. Nutzen Sie dabei das Google-Konto, mit dem Sie Apps auf dem Android-Gerät Ihres Kindes installieren.">Testing on Google Play is open. It's for parents and carers and takes two steps. Use the Google account you install apps with on your child's Android phone.</p>
+        <ol class="steps">
+          <li><span class="step-text" data-de="&lt;b&gt;Der Testgruppe beitreten.&lt;/b&gt; Auf der Seite der Google-Gruppe auf „Gruppe beitreten“ tippen.">
+            <b>Join the testers group.</b> On the Google Group page, tap "Join group".</span>
+            <a class="btn btn-secondary" href="https://groups.google.com/g/foxpace-testers" target="_blank" rel="noopener" data-de="Gruppe öffnen">Open the group</a></li>
+          <li><span class="step-text" data-de="&lt;b&gt;Beim Test mitmachen.&lt;/b&gt; Auf Google Play „Tester werden“ tippen und Foxpace dann installieren.">
+            <b>Join the test.</b> On Google Play, tap "Become a tester", then install Foxpace.</span>
+            <a class="btn btn-primary" href="https://play.google.com/apps/testing/app.foxpace" target="_blank" rel="noopener" data-de="Zu Google Play">Go to Google Play</a></li>
+        </ol>
+        <p class="muted prose" data-de="Der Test läuft in Deutschland und Österreich. Für Fragen oder Rückmeldungen nutzen Sie das Formular unten oder schreiben an &lt;a href=&quot;mailto:hello@foxpace.de&quot;&gt;hello@foxpace.de&lt;/a&gt;.">Testing is open in Germany and Austria. For questions or feedback, use the form below or write to <a href="mailto:hello@foxpace.de">hello@foxpace.de</a>.</p>
           <!-- Shown while the form service isn't connected (data-endpoint is empty). -->
           <div class="contact-mail" id="contact-mail" hidden>
             <div class="actions">
               <a class="btn btn-primary" href="mailto:hello@foxpace.de?subject=Android%20test" data-de-href="mailto:hello@foxpace.de?subject=Android-Test" data-de="Per E-Mail zum Test anmelden">Sign up for testing by email</a>
               <a class="btn btn-secondary" href="mailto:hello@foxpace.de" data-de="E-Mail schreiben">Write to us</a>
             </div>
-            <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre E-Mail-Adresse nur, um zu antworten oder Ihnen den Test-Link zu schicken, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your email address only to reply or to send you the test link, and delete it afterwards. <a href="privacy.html">Privacy</a></p>
+            <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre E-Mail-Adresse nur, um zu antworten, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your email address only to reply, and delete it afterwards. <a href="privacy.html">Privacy</a></p>
           </div>
           <!-- data-endpoint: the Formward form URL, e.g. https://forms.formward.eu/f/<id>. Empty = show the email fallback. -->
           <form class="waitlist-form contact-form" id="contact-form" data-endpoint="https://forms.formward.eu/f/0df33d54-3a74-404a-b687-d5137c20106e" action="https://forms.formward.eu/f/0df33d54-3a74-404a-b687-d5137c20106e" method="post" novalidate>
             <div class="hp" aria-hidden="true"><label for="contact-gotcha">Leave empty</label><input id="contact-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
             <label for="contact-topic" data-de="Worum geht es?">What is it about?</label>
             <select id="contact-topic" name="topic">
-              <option value="test" data-de="Anmeldung zum Android-Test">Sign up for the Android test</option>
               <option value="question" data-de="Frage oder Rückmeldung">Question or feedback</option>
+              <option value="test" data-de="Hilfe beim Beitritt zum Test">Help joining the test</option>
             </select>
             <label for="contact-name"><span data-de="Name">Name</span> <span class="optional" data-de="(freiwillig)">(optional)</span></label>
             <input id="contact-name" name="name" type="text" autocomplete="name">
@@ -904,7 +911,7 @@ footer a { color: var(--ink-2); }
             <input id="contact-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com">
             <label for="contact-message"><span data-de="Nachricht">Message</span> <span class="optional" id="contact-message-optional" data-de="(freiwillig)">(optional)</span></label>
             <textarea id="contact-message" name="message" rows="5"></textarea>
-            <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre Angaben nur, um zu antworten oder Ihnen den Test-Link zu schicken, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your details only to reply or to send you the test link, and delete them afterwards. <a href="privacy.html">Privacy</a></p>
+            <p class="waitlist-note" data-de="Bitte nur für Erwachsene. Wir nutzen Ihre Angaben nur, um zu antworten, und löschen sie danach. &lt;a href=&quot;datenschutz.html&quot;&gt;Datenschutz&lt;/a&gt;">For adults only. We use your details only to reply, and delete them afterwards. <a href="privacy.html">Privacy</a></p>
             <div><button class="btn btn-primary" type="submit" data-de="Senden">Send</button></div>
             <p class="waitlist-status" id="contact-status" role="status" hidden></p>
           </form>
@@ -1031,8 +1038,7 @@ footer a { color: var(--ink-2); }
 </script>
 <script>
 // Contact form. With a form service address in data-endpoint it sends the message; without one it hides itself
-// and shows the email buttons instead. "Sign up for testing" buttons open it with the test topic chosen.
-// A question needs a message; a test sign-up doesn't.
+// and shows the email buttons instead. Every topic needs a message.
 (function () {
   var form = document.getElementById("contact-form"), mail = document.getElementById("contact-mail"),
       topic = document.getElementById("contact-topic"), email = document.getElementById("contact-email"),
@@ -1046,8 +1052,8 @@ footer a { color: var(--ink-2); }
     de: { email: "Bitte geben Sie eine E-Mail-Adresse ein.", message: "Bitte schreiben Sie Ihre Frage oder Rückmeldung.", sending: "Wird gesendet …",
           sent: "Danke. Ihre Nachricht ist unterwegs, wir antworten per E-Mail.", failed: "Das hat leider nicht geklappt. Bitte schreiben Sie an hello@foxpace.de." }
   };
-  var SUBJECT = { test: "Foxpace: Android test sign-up", question: "Foxpace: question or feedback" };
-  function sync() { optional.hidden = topic.value !== "test"; message.required = topic.value !== "test"; }
+  var SUBJECT = { test: "Foxpace: help joining the test", question: "Foxpace: question or feedback" };
+  function sync() { optional.hidden = true; message.required = true; }
   topic.addEventListener("change", sync);
   document.querySelectorAll("a[data-topic]").forEach(function (a) {
     a.addEventListener("click", function () { topic.value = a.getAttribute("data-topic"); sync(); });
