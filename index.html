@@ -333,6 +333,16 @@ button.ib { background: transparent; padding: 0; cursor: pointer; }
 .contact-form textarea { resize: vertical; min-height: 120px; }
 .contact-form input:focus-visible, .contact-form select:focus-visible, .contact-form textarea:focus-visible { outline: 3px solid var(--fox); outline-offset: 1px; }
 .waitlist-status { font-size: 0.9rem; color: var(--ink-2); }
+.waitlist-status.is-error { color: var(--action); font-weight: 600; }
+/* Shown in place of the contact form once a message is sent, so the result can't be missed. */
+.sent-card { max-width: 560px; display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 6px 16px; align-items: start;
+  background: var(--leaf-bg); border: 1px solid var(--leaf); border-radius: 16px; padding: 24px; }
+.sent-card:focus { outline: none; }
+.sent-card:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+.sent-icon { grid-row: span 2; width: 48px; height: 48px; border-radius: 50%; background: var(--leaf); color: var(--canvas); display: grid; place-items: center; }
+.sent-card h3 { font-size: var(--step-2); }
+.sent-card p { margin: 0; color: var(--ink-2); }
+.sent-card .btn { grid-column: 2; justify-self: start; margin-top: 14px; }
 @media (max-width: 760px) { .waitlist { grid-template-columns: minmax(0, 1fr); padding: 20px; } }
 .demo-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .btn-small { min-height: 44px; padding: 8px 16px; font-size: 0.98rem; }
@@ -918,6 +928,12 @@ footer a { color: var(--ink-2); }
             <div><button class="btn btn-primary" type="submit" data-de="Senden" data-uk="Надіслати">Send</button></div>
             <p class="waitlist-status" id="contact-status" role="status" hidden></p>
           </form>
+          <div class="sent-card" id="contact-sent" tabindex="-1" role="status" hidden>
+            <span class="sent-icon" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <h3 id="contact-sent-title"></h3>
+            <p id="contact-sent-text"></p>
+            <button type="button" class="btn btn-secondary" id="contact-again"></button>
+          </div>
       </div>
     </div>
   </section>
@@ -1053,20 +1069,39 @@ footer a { color: var(--ink-2); }
       topic = document.getElementById("contact-topic"), email = document.getElementById("contact-email"),
       message = document.getElementById("contact-message"), optional = document.getElementById("contact-message-optional"),
       status = document.getElementById("contact-status"), endpoint = form.getAttribute("data-endpoint"),
-      emailNote = document.getElementById("contact-email-note");
+      emailNote = document.getElementById("contact-email-note"),
+      sent = document.getElementById("contact-sent"), again = document.getElementById("contact-again"), sentWasTest = false;
   if (!endpoint) { form.hidden = true; mail.hidden = false; return; }
   form.action = endpoint;
   var TEXT = {
     en: { email: "Please enter an email address.", message: "Please write your question or feedback.", sending: "Sending…",
-          sentTest: "Thank you. We'll add you to the test and email you the link.",
-          sent: "Thank you. Your message is on its way, and we'll reply by email.", failed: "Sorry, that didn't work. Please write to hello@foxpace.de instead." },
+          sentTitle: "Thank you!", again: "Send another message",
+          sentTest: "You're signed up. We'll add you to the test and email you the link.",
+          sent: "Your message is on its way. We'll reply by email.", failed: "Sorry, that didn't work. Please write to hello@foxpace.de instead." },
     de: { email: "Bitte geben Sie eine E-Mail-Adresse ein.", message: "Bitte schreiben Sie Ihre Frage oder Rückmeldung.", sending: "Wird gesendet …",
-          sentTest: "Danke. Wir nehmen Sie in den Test auf und schicken Ihnen den Link per E-Mail.",
-          sent: "Danke. Ihre Nachricht ist unterwegs, wir antworten per E-Mail.", failed: "Das hat leider nicht geklappt. Bitte schreiben Sie an hello@foxpace.de." },
+          sentTitle: "Danke!", again: "Weitere Nachricht senden",
+          sentTest: "Sie sind angemeldet. Wir nehmen Sie in den Test auf und schicken Ihnen den Link per E-Mail.",
+          sent: "Ihre Nachricht ist unterwegs. Wir antworten per E-Mail.", failed: "Das hat leider nicht geklappt. Bitte schreiben Sie an hello@foxpace.de." },
     uk: { email: "Будь ласка, введіть адресу електронної пошти.", message: "Будь ласка, напишіть ваше питання або відгук.", sending: "Надсилаємо…",
-          sent: "Дякуємо. Ваше повідомлення надіслано, ми відповімо електронною поштою.", sentTest: "Дякуємо. Ми додамо вас до тестування й надішлемо посилання електронною поштою.", failed: "На жаль, не вдалося. Будь ласка, напишіть на hello@foxpace.de." }
+          sentTitle: "Дякуємо!", again: "Надіслати ще одне повідомлення",
+          sent: "Ваше повідомлення надіслано. Ми відповімо електронною поштою.", sentTest: "Вас зареєстровано. Ми додамо вас до тестування й надішлемо посилання електронною поштою.", failed: "На жаль, не вдалося. Будь ласка, напишіть на hello@foxpace.de." }
   };
   var SUBJECT = { test: "Foxpace: Android test sign-up", question: "Foxpace: question or feedback" };
+  function T() { return TEXT[document.documentElement.lang] || TEXT.en; }
+  function fillSent() {
+    var t = T();
+    document.getElementById("contact-sent-title").textContent = t.sentTitle;
+    document.getElementById("contact-sent-text").textContent = sentWasTest ? t.sentTest : t.sent;
+    again.textContent = t.again;
+  }
+  function showSent(wasTest) {
+    sentWasTest = wasTest; fillSent();
+    form.hidden = true; status.hidden = true; sent.hidden = false;
+    var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sent.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" });
+    sent.focus({ preventScroll: true });
+  }
+  again.addEventListener("click", function () { sent.hidden = true; form.hidden = false; topic.focus(); });
   function sync() { var isTest = topic.value === "test"; optional.hidden = !isTest; message.required = !isTest; emailNote.hidden = !isTest; }
   topic.addEventListener("change", sync);
   document.querySelectorAll("a[data-topic]").forEach(function (a) {
@@ -1075,9 +1110,10 @@ footer a { color: var(--ink-2); }
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var t = (TEXT[document.documentElement.lang] || TEXT.en);
-    status.hidden = false;
+    status.hidden = false; status.classList.add("is-error");
     if (!email.value.trim() || !email.checkValidity()) { status.textContent = t.email; email.focus(); return; }
     if (message.required && !message.value.trim()) { status.textContent = t.message; message.focus(); return; }
+    status.classList.remove("is-error");
     // Sent as a plain form (URL-encoded). Formward answers 503 "busy" to multipart FormData bodies.
     var wasTest = topic.value === "test";
     var data = new URLSearchParams(new FormData(form));
@@ -1087,11 +1123,11 @@ footer a { color: var(--ink-2); }
     button.disabled = true; status.textContent = t.sending;
     fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(r.status); }); })
-      .then(function () { status.textContent = wasTest ? t.sentTest : t.sent; form.reset(); sync(); })
-      .catch(function () { status.textContent = t.failed; })
+      .then(function () { form.reset(); sync(); showSent(wasTest); })
+      .catch(function () { status.classList.add("is-error"); status.textContent = t.failed; })
       .then(function () { button.disabled = false; });
   });
-  window.addEventListener("fp-lang", function () { status.hidden = true; });
+  window.addEventListener("fp-lang", function () { status.hidden = true; if (!sent.hidden) fillSent(); });
   sync();
 })();
 </script>
