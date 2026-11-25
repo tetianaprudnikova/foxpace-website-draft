@@ -975,8 +975,9 @@ footer a { color: var(--ink-2); }
 </footer>
 
 <script>
-// Language: English, German or Ukrainian. Starts from a saved choice, else the browser language; the choice is
-// remembered. A text or attribute without a Ukrainian version (e.g. links to the English legal pages) stays English.
+// Language: English, German or Ukrainian. Each visit follows the browser's language list (the first of de/en/uk
+// in it, else English). A choice made with the DE · EN · UA buttons lasts only for this visit (session storage),
+// so the legal pages open in the same language. A text or attribute without a Ukrainian version stays English.
 (function () {
   var root = document.documentElement;
   var ATTRS = ["aria-label", "alt", "title", "href"];
@@ -999,15 +1000,21 @@ footer a { color: var(--ink-2); }
     });
     window.dispatchEvent(new CustomEvent("fp-lang", { detail: lang }));
   }
-  var saved = null;
-  try { saved = localStorage.getItem("foxpace-lang"); } catch (e) {}
-  var browser = navigator.language || "";
-  var start = saved === "de" || saved === "en" || saved === "uk" ? saved
-    : /^de\b/i.test(browser) ? "de" : /^uk\b/i.test(browser) ? "uk" : "en";
+  function fromBrowser() {
+    var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+    for (var i = 0; i < list.length; i++) {
+      var code = String(list[i]).toLowerCase().split("-")[0];
+      if (code === "de" || code === "en" || code === "uk") return code;
+    }
+    return "en";
+  }
+  var chosen = null;
+  try { chosen = sessionStorage.getItem("foxpace-lang"); localStorage.removeItem("foxpace-lang"); } catch (e) {}
+  var start = chosen === "de" || chosen === "en" || chosen === "uk" ? chosen : fromBrowser();
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () {
       var lang = b.getAttribute("data-lang");
-      try { localStorage.setItem("foxpace-lang", lang); } catch (e) {}
+      try { sessionStorage.setItem("foxpace-lang", lang); } catch (e) {}
       apply(lang);
     });
   });
